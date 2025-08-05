@@ -1,0 +1,163 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    color: #ff4e50;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    color: #f9d423;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: #ff4e50;
+}
+
+main {
+    max-width: 900px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 40px;
+}
+
+.produto-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.produto-container img {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    background: #fff;
+}
+
+.produto-info {
+    flex: 1;
+}
+
+.preco {
+    color: #ff4e50;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.produto-info ul {
+    padding-left: 18px;
+    margin-bottom: 18px;
+}
+
+.produto-info button {
+    background: linear-gradient(90deg, #f9d423 0%, #ff4e50 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.produto-info button:hover {
+    background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
+    transform: scale(1.05);
+}
+
+section {
+    margin-top: 40px;
+}
+
+h3 {
+    color: #ff4e50;
+    margin-bottom: 10px;
+}
+
+.avaliacao {
+    background: #fffbe7;
+    border-left: 5px solid #f9d423;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.avaliacao strong {
+    color: #ff4e50;
+}
+
+.avaliacao span {
+    color: #f9d423;
+    font-size: 1.2rem;
+    margin-left: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+}
+
+form input, form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+form button {
+    background: linear-gradient(90deg, #f9d423 0%, #ff4e50 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+form button:hover {
+    background: linear-gradient(90deg, #ff4e50 0%, #f9d423 100%);
+    transform: scale(1.03);
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #fff;
+    color: #888;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+}

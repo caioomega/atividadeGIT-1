@@ -1,11 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Compre seu Homer!</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <header>
+        <h1>Compre seu Homer!</h1>
+        <nav>
+            <a href="#sobre">Sobre</a>
+            <a href="#avaliacoes">Avaliações</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+    <main>
+        <section id="produto">
+            <div class="produto-container">
+                <img src="https://upload.wikimedia.org/wikipedia/en/0/02/Homer_Simpson_2006.png" alt="Homer Simpson" width="300">
+                <div class="produto-info">
+                    <h2>Homer Simpson Colecionável</h2>
+                    <p class="preco">R$ 99,90</p>
+                    <p>Os melhores Homeros do mercado! Perfeitos para fãs de Os Simpsons. Garanta já o seu Homer exclusivo para decorar sua casa ou presentear alguém especial.</p>
+                    <ul>
+                        <li>Material: Resina de alta qualidade</li>
+                        <li>Altura: 25cm</li>
+                        <li>Produto oficial</li>
+                        <li>Frete grátis para todo Brasil</li>
+                    </ul>
+                    <button onclick="alert('Obrigado por comprar um Homer!')">Comprar agora</button>
+                </div>
+            </div>
+        </section>
+        <section id="sobre">
+            <h3>Sobre o Produto</h3>
+            <p>Este Homer Simpson é uma peça exclusiva, feita para colecionadores e fãs da série. Detalhes incríveis e acabamento premium garantem um produto de alta qualidade.</p>
+        </section>
+        <section id="avaliacoes">
+            <h3>Avaliações dos Clientes</h3>
+            <div class="avaliacao">
+                <strong>Maria S.</strong>
+                <span>★★★★★</span>
+                <p>Amei! Produto de ótima qualidade, chegou rápido e bem embalado.</p>
+            </div>
+            <div class="avaliacao">
+                <strong>João P.</strong>
+                <span>★★★★★</span>
+                <p>Perfeito para minha coleção! Recomendo a todos os fãs.</p>
+            </div>
+        </section>
+        <section id="contato">
+            <h3>Fale Conosco</h3>
+            <form>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="mensagem">Mensagem:</label>
+                <textarea id="mensagem" name="mensagem" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Homer Store. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
+<script src="script.js"></script>
