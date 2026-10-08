@@ -114,9 +114,9 @@ def sfx_click(pitch=1.0, **_):
     return norm(0.8 * tr + 0.55 * body + 0.35 * low)
 
 
-def sfx_tick(pitch=1.0, tonal=False, **_):
+def sfx_tick(pitch=1.0, tonal=False, base=1174.66, **_):
     if tonal:
-        f = 1174.66 * pitch  # Ré6 × razões da escala maior
+        f = base * pitch  # nota base (Ré6 na v1) × razão da escala
         n = ns(0.35)
         t = tt(n)
         mod = np.sin(2 * np.pi * f * 3.0 * t) * 1.2 * np.exp(-t / 0.03)
@@ -232,9 +232,21 @@ def sfx_impact(soft=False, **_):
     return reverb(st, wet=0.35)[:, :n]
 
 
-def sfx_ding(**_):
+def sfx_snap(**_):
+    n = ns(1.2)
+    t = tt(n)
+    crack = hp(noise(n), 1500) * np.exp(-t / 0.018)
+    body = bp(noise(n), 350, 1400) * np.exp(-t / 0.05)
+    # cauda metálica inarmônica (não define tom)
+    tail = sum(np.sin(2 * np.pi * f * t + i) for i, f in enumerate((2210.0, 3170.0, 4630.0, 6110.0))) * np.exp(-t / 0.25) * 0.12
+    x = 1.0 * crack + 0.6 * body + tail
+    st = pan_st(norm(x), np.zeros(n))
+    return reverb(st, wet=0.45)[:, :n]
+
+
+def sfx_ding(notes=(1760.0, 2349.3), **_):
     out = np.zeros(ns(1.6))
-    for k, (f, dt) in enumerate([(1760.0, 0.0), (2349.3, 0.075)]):
+    for k, (f, dt) in enumerate(zip(notes, (0.0, 0.075))):
         n = ns(1.5)
         t = tt(n)
         mod = np.sin(2 * np.pi * f * 3.5 * t) * 2.0 * np.exp(-t / 0.12)
@@ -246,11 +258,11 @@ def sfx_ding(**_):
     return reverb(st, wet=0.4)[:, : len(out)]
 
 
-def sfx_sparkle(seed=3, **_):
+def sfx_sparkle(seed=3, notes=None, **_):
     r = np.random.default_rng(seed)
     total = ns(1.2)
     st = np.zeros((2, total))
-    notes = [2349.3, 2637.0, 2960.0, 3520.0, 3951.1, 4698.6]  # Ré maior pentatônica (agudos)
+    notes = notes or [2349.3, 2637.0, 2960.0, 3520.0, 3951.1, 4698.6]  # padrão: Ré maior pentatônica (agudos)
     for i in range(9):
         f = notes[r.integers(len(notes))]
         n = ns(0.3)
@@ -307,12 +319,12 @@ def sfx_mouse(**_):
 SYNTH = {
     "click": sfx_click, "tick": sfx_tick, "pop": sfx_pop, "type": sfx_type, "whoosh": sfx_whoosh,
     "dash": sfx_dash, "swish": sfx_swish, "air": sfx_air, "reverse": sfx_reverse, "riser": sfx_riser,
-    "impact": sfx_impact, "ding": sfx_ding, "sparkle": sfx_sparkle, "glitch": sfx_glitch, "mouse": sfx_mouse,
+    "impact": sfx_impact, "snap": sfx_snap, "ding": sfx_ding, "sparkle": sfx_sparkle, "glitch": sfx_glitch, "mouse": sfx_mouse,
 }
 # ganho base por tipo (balanço entre famílias de sons)
 BASE = {
     "click": 0.62, "tick": 0.48, "pop": 0.58, "type": 0.95, "whoosh": 0.85, "dash": 0.85, "swish": 0.5, "air": 0.6,
-    "reverse": 0.7, "riser": 0.55, "impact": 0.62, "ding": 0.6, "sparkle": 0.4, "glitch": 0.55, "mouse": 0.85,
+    "reverse": 0.7, "riser": 0.55, "impact": 0.62, "snap": 0.7, "ding": 0.6, "sparkle": 0.4, "glitch": 0.55, "mouse": 0.85,
 }
 
 

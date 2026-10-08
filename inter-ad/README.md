@@ -23,6 +23,26 @@ Trilha: house/pop a 120 BPM em Ré maior. O drop sincroniza com a entrada do deg
 10–12 s há um respiro enquanto o Pix "processa" e a batida volta no "Pix enviado!". O fim
 resolve em IV→I no endcard. A trilha abaixa automaticamente (ducking) quando os efeitos tocam.
 
+## Versão 2: com a música "DARK AURA FUNK (Slowed) – elude"
+
+**Arquivo:** `inter_industria_ad_funk_20s.mp4`
+
+É o mesmo roteiro, com a mesma intenção, mas sincronizado com a música enviada:
+
+- Uso o trecho de 6,93 s a 26,93 s da faixa. São 1,85 s de intro, e então o drop (o 808) entra
+  junto com o degradê laranja. O vídeo termina exatamente onde a seção pesada da música acaba.
+- Todas as entradas de texto, trocas de cena, cliques e o endcard caem na batida
+  (112,26 BPM, uma batida a cada 0,5345 s). O cronograma está em `T_FUNK`, dentro do `ad.html`.
+- O visual é mais limpo: sem glitch e sem faíscas.
+- Os SFX são menos numerosos e mais destacados. Usei agudos e transientes claros, que passam
+  por cima do 808. A música abaixa até 7 dB a cada efeito (ducking), então os picos dos
+  efeitos ficam de 4 a 10 dB acima da música.
+- Os SFX com nota (ticks dos raios do logo, "ding" do Pix) estão afinados em Si, Mi e Fá#,
+  notas do tom da música (Si menor).
+
+A música não vai para o repositório: `music/` está no `.gitignore`. Para gerar de novo,
+coloque o mp3 em `music/dark_aura_funk_elude.mp3` e rode `VARIANT=funk ./build.sh`.
+
 ## Estrutura
 
 - `ad.html`: a animação inteira. `render(t)` é uma função pura do tempo, e o mesmo
@@ -34,17 +54,19 @@ resolve em IV→I no endcard. A trilha abaixa automaticamente (ducking) quando o
 - `tools/clouds.py`: texturas de nuvem e vapor.
 - `tools/render.mjs`: render no Chromium (Playwright) com motion blur e processos em paralelo.
 - `tools/audio.py`: síntese dos efeitos e da trilha, mixagem, ducking e limitador.
+- `tools/mix_music.py`: mixa uma música enviada com os efeitos (versão funk).
 - `build.sh`: gera tudo de ponta a ponta.
 
 ## Gerar de novo
 
 ```bash
 pip install numpy scipy pillow potracer
-./build.sh            # FPS=30 SUB=2 JOBS=4 por padrão
+./build.sh                 # versão 1 (FPS=30 SUB=2 JOBS=4 por padrão)
+VARIANT=funk ./build.sh    # versão com a música
 ```
 
-Para ver um instante específico: abra `ad.html?t=12.2` no navegador, ou rode
-`node tools/render.mjs frames out/ 12.2`.
+Para ver um instante específico: abra `ad.html?t=12.2` (ou `ad.html?v=funk&t=12.2`) no navegador,
+ou rode `node tools/render.mjs frames out/ 12.2` (com `AD_VARIANT=funk` para a versão 2).
 
 > Os textos e afirmações do anúncio (por exemplo "Conta PJ digital", "Pix e boletos" e a URL)
 > são de exemplo. Confirme com a marca antes de publicar.

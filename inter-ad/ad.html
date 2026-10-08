@@ -193,7 +193,7 @@ const symSvg = (size, color) => {
    CRONOGRAMA (segundos)
    ===================================================================== */
 const LETTER_ORDER = ['r', 'e', 't', 'n', 'i']; // da direita p/ a esquerda
-const T = {
+const T_V1 = {
   gearIn: 0.08,
   w1: [0.48, 0.73, 0.98],
   drop: 2.0,
@@ -216,6 +216,38 @@ const T = {
   url0: 18.08, urlDt: 0.046, urlTxt: 'inter.co/empresas',
   tag: 18.95, shine: 19.15,
 };
+
+/* Variante "funk": cronograma preso à grade da música (DARK AURA FUNK – elude, trecho 6,93 s → 26,93 s).
+   112,26 BPM → batida de 0,5345 s; o 808 do drop entra em 1,85 s do AD. b(k) = tempo da batida k. */
+const BEAT = 0.5345, DROP = 1.85;
+const b = k => +(DROP + k * BEAT).toFixed(4);
+const T_FUNK = {
+  gearIn: 0.06,
+  w1: [b(-2.5), b(-2), b(-1.5)],
+  drop: DROP, wipeLead: 0.14,
+  w2: [b(0.5), b(1)],
+  pill: b(2), morph: b(2.5), morphEnd: b(2.5) + 0.48,
+  type0: b(3.5), typeDt: BEAT / 6, typed: 'Inter Empresas',
+  barUp: b(6), cardIn: b(6) + 0.2,
+  rows: [b(7), b(7.5), b(8), b(8.5)],
+  ringIn: b(9), ringOut: b(14.5),
+  head: [b(15.5), b(16), b(16.5), b(17), b(17.5), b(17.75), b(18), b(18.25), b(18.5)],
+  btnIn: b(19), ok: b(20.5),
+  out5: b(21.5), clouds: b(21.5) + 0.08,
+  w6: [b(22.5), b(23), b(23.5)],
+  cta: b(24), ctaOpen: b(24.5),
+  cur0: b(24.5) + 0.12, click: b(26),
+  expand: b(26.5), end: b(27),
+  barGrow: b(27) + 0.07, fan0: b(27) + 0.24, fanDt: BEAT / 8,
+  logoMove: b(28.5), let0: b(28.5) + 0.12, letDt: 0.055,
+  bars: b(30), glitch: b(30) + 0.26, settle: b(30) + 0.42,
+  url0: b(31), urlDt: BEAT / 12, urlTxt: 'inter.co/empresas',
+  tag: b(32.5), shine: b(32.25),
+};
+const VARIANT = new URLSearchParams(location.search).get('v') || 'v1';
+const T = VARIANT === 'funk' ? T_FUNK : T_V1;
+// a versão funk é mais limpa: sem glitch e sem faíscas
+const FX = { glitch: VARIANT !== 'funk', sparks: VARIANT !== 'funk' };
 
 /* =====================================================================
    CONSTRUÇÃO DO DOM
@@ -414,10 +446,11 @@ function render(t) {
   const bgW = $('bgWhite'), bgG = $('bgGrad'), bgD = $('bgDark');
   bgW.style.display = t < T.drop + .6 ? '' : 'none';
   set($('blob'), { s: 1 + .07 * Math.sin(t * 2.4) + .25 * E.outCubic(seg(t, 0, .8)) - .25, op: E.outCubic(seg(t, 0, .5)) });
-  if (t >= T.drop && t < T.end + .1) {
+  if (t >= T.drop - (T.wipeLead || 0) && t < T.end + .1) {
     bgG.style.display = '';
     bgG.style.background = meshBG(t);
-    const p = E.inOutCubic(seg(t, T.drop, T.drop + .5));
+    const w0 = T.drop - (T.wipeLead || 0); // wipeLead: adianta a varredura p/ a borda chegar na batida
+    const p = E.inOutCubic(seg(t, w0, w0 + .5));
     const X = lerp(-35, 135, p);
     const m = p >= 1 ? 'none' : `linear-gradient(90deg,#000 ${X - 22}%,transparent ${X + 22}%)`;
     bgG.style.webkitMaskImage = m;
@@ -582,7 +615,7 @@ function render(t) {
       const a = (i / sparks.length) * Math.PI * 2 + .2;
       const d = lerp(150, 260, E.outCubic(ps)) * (i % 2 ? .85 : 1);
       const cx = 540 + Math.cos(a) * d * 1.45, cy = 614 + Math.sin(a) * d * .52;
-      set(s, { op: ps > 0 && ps < 1 ? (1 - E.inCubic(ps)) : 0, x: cx - 3, y: cy - 13, r: a * 180 / Math.PI + 90, sy: lerp(1.4, .3, ps) });
+      set(s, { op: FX.sparks && ps > 0 && ps < 1 ? (1 - E.inCubic(ps)) : 0, x: cx - 3, y: cy - 13, r: a * 180 / Math.PI + 90, sy: lerp(1.4, .3, ps) });
     });
   }
 
@@ -673,7 +706,7 @@ function render(t) {
       g.style.display = t >= t0 ? '' : 'none';
     });
     // glitch no logo
-    const gl = t >= T.glitch && t < T.settle;
+    const gl = FX.glitch && t >= T.glitch && t < T.settle;
     const fr = Math.floor(t * 30);
     $('logoSvg').style.transform = gl ? `translate(${((rand(fr) - .5) * 18).toFixed(1)}px,${((rand(fr + 9) - .5) * 6).toFixed(1)}px)` : 'none';
     $('logoSvg').style.filter = gl && rand(fr + 3) > .45 ? `drop-shadow(${(rand(fr + 4) * 14 - 7).toFixed(1)}px 0 0 #fff)` : 'none';
@@ -715,49 +748,90 @@ function render(t) {
    ===================================================================== */
 const SFX = [];
 const sfx = (t, type, o = {}) => SFX.push({ t: +t.toFixed(4), type, ...o });
-sfx(T.gearIn, 'whoosh', { dur: .45, gain: .5, pan: -.4, f0: 600, f1: 3500 });
-sfx(T.gearIn + .3, 'click', { gain: .9, pitch: 1.0 });
-T.w1.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .75, pitch: [1, 1.12, 1.26][i] }));
-sfx(T.drop - 1.0, 'riser', { dur: 1.0, gain: .5 });
-sfx(T.drop, 'impact', { gain: .55, soft: true });
-sfx(T.drop, 'whoosh', { dur: .7, gain: .75, pan: -.9, panTo: .9, f0: 300, f1: 2800 });
-T.w2.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .8, pitch: [1.12, 1.4][i] }));
-sfx(T.pill, 'click', { gain: .85, pitch: 1.15 });
-sfx(T.morph, 'dash', { dur: .38, gain: .7 });
-for (let i = 0; i < T.typed.length; i++) if (T.typed[i] !== ' ' || true) sfx(T.type0 + i * T.typeDt, 'type', { gain: .55, seed: i, space: T.typed[i] === ' ' });
-sfx(T.type0 + T.typed.length * T.typeDt + .12, 'click', { gain: .6, pitch: .9 }); // "enter"
-sfx(T.barUp, 'whoosh', { dur: .5, gain: .6, pan: .2, f0: 800, f1: 4000 });
-sfx(T.cardIn + .05, 'pop', { gain: .55, pitch: .7 });
-T.rows.forEach((t0, i) => sfx(t0 + .04, 'tick', { gain: .7, pitch: [1, 1.12, 1.25, 1.5][i] }));
-sfx(T.ringIn - .05, 'whoosh', { dur: .8, gain: .85, pan: .7, panTo: -.7, f0: 250, f1: 2600 });
-tiles.forEach((_, i) => { if (i % 2 === 0) sfx(T.ringIn + .2 + i * .028, 'tick', { gain: .28, pitch: 1.6 + i * .06, pan: Math.cos(i / 14 * 6.28) * .6 }); });
-sfx(T.ringOut, 'dash', { dur: .55, gain: .95, spin: true });
-T.head.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .55, pitch: 1 + (i % 4) * .09 + (i > 3 ? .2 : 0) }));
-sfx(T.btnIn + .05, 'pop', { gain: .75, pitch: .8 });
-for (let k = 0; k < 6; k++) sfx(T.btnIn + .35 + k * .1, 'tick', { gain: .16 + k * .02, pitch: 2.2 });
-sfx(T.ok - 1.0, 'riser', { dur: 1.0, gain: .35 });
-sfx(T.ok, 'ding', { gain: .8 });
-sfx(T.ok + .02, 'sparkle', { gain: .45 });
-sfx(T.out5 - .02, 'whoosh', { dur: .55, gain: .55, pan: 0, f0: 1800, f1: 300 });
-sfx(T.clouds, 'air', { dur: 1.3, gain: .7 });
-T.w6.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .75, pitch: [1, 1.18, 1.35][i] }));
-sfx(T.cta + .03, 'pop', { gain: .8, pitch: .9 });
-sfx(T.ctaOpen, 'dash', { dur: .3, gain: .55 });
-sfx(T.cur0 + .05, 'swish', { gain: .25 });
-sfx(T.click, 'mouse', { gain: 1.0 });
-sfx(T.expand - .1, 'reverse', { dur: .45, gain: .75 });
-sfx(T.end, 'impact', { gain: 1.0 });
-sfx(T.barGrow, 'dash', { dur: .25, gain: .55 });
-L.pieces.forEach((_, i) => { if (i > 0) sfx(T.fan0 + (i - 1) * T.fanDt + .2, 'tick', { gain: .7, pitch: [1, 1.12, 1.26, 1.34, 1.5, 1.68][i - 1], tonal: true }); });
-sfx(T.logoMove, 'whoosh', { dur: .45, gain: .4, pan: -.5, f0: 900, f1: 3000 });
-LETTER_ORDER.forEach((k, i) => sfx(T.let0 + i * T.letDt + .06, 'pop', { gain: .6, pitch: 1.2 + i * .1 }));
-sfx(T.bars, 'dash', { dur: .3, gain: .7, pan: -.8 });
-sfx(T.bars + .04, 'dash', { dur: .3, gain: .7, pan: .8 });
-sfx(T.glitch, 'glitch', { dur: T.settle - T.glitch, gain: .6 });
-sfx(T.settle, 'click', { gain: .9, pitch: .85 });
-for (let i = 0; i < T.urlTxt.length; i++) sfx(T.url0 + i * T.urlDt, 'type', { gain: .45, seed: 50 + i });
-sfx(T.tag, 'tick', { gain: .3, pitch: 1.4 });
-sfx(T.shine, 'sparkle', { gain: .5 });
+function sfxV1() {
+  sfx(T.gearIn, 'whoosh', { dur: .45, gain: .5, pan: -.4, f0: 600, f1: 3500 });
+  sfx(T.gearIn + .3, 'click', { gain: .9, pitch: 1.0 });
+  T.w1.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .75, pitch: [1, 1.12, 1.26][i] }));
+  sfx(T.drop - 1.0, 'riser', { dur: 1.0, gain: .5 });
+  sfx(T.drop, 'impact', { gain: .55, soft: true });
+  sfx(T.drop, 'whoosh', { dur: .7, gain: .75, pan: -.9, panTo: .9, f0: 300, f1: 2800 });
+  T.w2.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .8, pitch: [1.12, 1.4][i] }));
+  sfx(T.pill, 'click', { gain: .85, pitch: 1.15 });
+  sfx(T.morph, 'dash', { dur: .38, gain: .7 });
+  for (let i = 0; i < T.typed.length; i++) if (T.typed[i] !== ' ' || true) sfx(T.type0 + i * T.typeDt, 'type', { gain: .55, seed: i, space: T.typed[i] === ' ' });
+  sfx(T.type0 + T.typed.length * T.typeDt + .12, 'click', { gain: .6, pitch: .9 }); // "enter"
+  sfx(T.barUp, 'whoosh', { dur: .5, gain: .6, pan: .2, f0: 800, f1: 4000 });
+  sfx(T.cardIn + .05, 'pop', { gain: .55, pitch: .7 });
+  T.rows.forEach((t0, i) => sfx(t0 + .04, 'tick', { gain: .7, pitch: [1, 1.12, 1.25, 1.5][i] }));
+  sfx(T.ringIn - .05, 'whoosh', { dur: .8, gain: .85, pan: .7, panTo: -.7, f0: 250, f1: 2600 });
+  tiles.forEach((_, i) => { if (i % 2 === 0) sfx(T.ringIn + .2 + i * .028, 'tick', { gain: .28, pitch: 1.6 + i * .06, pan: Math.cos(i / 14 * 6.28) * .6 }); });
+  sfx(T.ringOut, 'dash', { dur: .55, gain: .95, spin: true });
+  T.head.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .55, pitch: 1 + (i % 4) * .09 + (i > 3 ? .2 : 0) }));
+  sfx(T.btnIn + .05, 'pop', { gain: .75, pitch: .8 });
+  for (let k = 0; k < 6; k++) sfx(T.btnIn + .35 + k * .1, 'tick', { gain: .16 + k * .02, pitch: 2.2 });
+  sfx(T.ok - 1.0, 'riser', { dur: 1.0, gain: .35 });
+  sfx(T.ok, 'ding', { gain: .8 });
+  sfx(T.ok + .02, 'sparkle', { gain: .45 });
+  sfx(T.out5 - .02, 'whoosh', { dur: .55, gain: .55, pan: 0, f0: 1800, f1: 300 });
+  sfx(T.clouds, 'air', { dur: 1.3, gain: .7 });
+  T.w6.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .75, pitch: [1, 1.18, 1.35][i] }));
+  sfx(T.cta + .03, 'pop', { gain: .8, pitch: .9 });
+  sfx(T.ctaOpen, 'dash', { dur: .3, gain: .55 });
+  sfx(T.cur0 + .05, 'swish', { gain: .25 });
+  sfx(T.click, 'mouse', { gain: 1.0 });
+  sfx(T.expand - .1, 'reverse', { dur: .45, gain: .75 });
+  sfx(T.end, 'impact', { gain: 1.0 });
+  sfx(T.barGrow, 'dash', { dur: .25, gain: .55 });
+  L.pieces.forEach((_, i) => { if (i > 0) sfx(T.fan0 + (i - 1) * T.fanDt + .2, 'tick', { gain: .7, pitch: [1, 1.12, 1.26, 1.34, 1.5, 1.68][i - 1], tonal: true }); });
+  sfx(T.logoMove, 'whoosh', { dur: .45, gain: .4, pan: -.5, f0: 900, f1: 3000 });
+  LETTER_ORDER.forEach((k, i) => sfx(T.let0 + i * T.letDt + .06, 'pop', { gain: .6, pitch: 1.2 + i * .1 }));
+  sfx(T.bars, 'dash', { dur: .3, gain: .7, pan: -.8 });
+  sfx(T.bars + .04, 'dash', { dur: .3, gain: .7, pan: .8 });
+  sfx(T.glitch, 'glitch', { dur: T.settle - T.glitch, gain: .6 });
+  sfx(T.settle, 'click', { gain: .9, pitch: .85 });
+  for (let i = 0; i < T.urlTxt.length; i++) sfx(T.url0 + i * T.urlDt, 'type', { gain: .45, seed: 50 + i });
+  sfx(T.tag, 'tick', { gain: .3, pitch: 1.4 });
+  sfx(T.shine, 'sparkle', { gain: .5 });
+}
+
+// Versão funk: menos sons, porém mais destacados (agudos e transientes claros que furam o 808).
+function sfxFunk() {
+  const B5 = 987.77, SCALE = [1, 1.3348, 1.4983, 2, 2.6697, 2.9966]; // Si5 Mi6 Fá#6 Si6 Mi7 Fá#7
+  sfx(T.gearIn, 'whoosh', { dur: .4, gain: .7, pan: -.4, f0: 900, f1: 5000 });
+  sfx(T.gearIn + .3, 'click', { gain: 1, pitch: 1.1 });
+  T.w1.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .9, pitch: [1.3, 1.45, 1.65][i] }));
+  sfx(T.drop - .9, 'riser', { dur: .9, gain: .45 });
+  sfx(T.drop - .02, 'whoosh', { dur: .6, gain: 1, pan: -.9, panTo: .9, f0: 600, f1: 6000 });
+  T.w2.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .9, pitch: [1.45, 1.75][i] }));
+  sfx(T.pill, 'click', { gain: 1, pitch: 1.2 });
+  sfx(T.morph, 'dash', { dur: .34, gain: .9 });
+  for (let i = 0; i < T.typed.length; i++) sfx(T.type0 + i * T.typeDt, 'type', { gain: 1, seed: i, space: T.typed[i] === ' ' });
+  sfx(T.type0 + T.typed.length * T.typeDt + .1, 'click', { gain: .9, pitch: 1 });
+  sfx(T.barUp, 'whoosh', { dur: .45, gain: .85, pan: .2, f0: 1200, f1: 6000 });
+  T.rows.forEach((t0, i) => sfx(t0 + .04, 'tick', { gain: .9, pitch: SCALE[i], base: B5, tonal: true }));
+  sfx(T.ringIn - .05, 'whoosh', { dur: .7, gain: 1, pan: .7, panTo: -.7, f0: 500, f1: 5000 });
+  sfx(T.ringOut, 'dash', { dur: .5, gain: 1, spin: true });
+  T.head.slice(0, 4).forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .85, pitch: 1.3 + i * .12 }));
+  sfx(T.head[4] + .02, 'tick', { gain: .7, pitch: SCALE[2], base: B5, tonal: true });
+  sfx(T.btnIn + .05, 'pop', { gain: .9, pitch: 1.1 });
+  sfx(T.ok, 'ding', { gain: 1, notes: [1479.98, 1975.53] });
+  sfx(T.out5 - .02, 'whoosh', { dur: .5, gain: .8, f0: 4000, f1: 700 });
+  sfx(T.clouds, 'air', { dur: 1.1, gain: .7 });
+  T.w6.forEach((t0, i) => sfx(t0 + .03, 'pop', { gain: .9, pitch: [1.3, 1.5, 1.75][i] }));
+  sfx(T.cta + .03, 'pop', { gain: .9, pitch: 1.1 });
+  sfx(T.ctaOpen, 'dash', { dur: .28, gain: .75 });
+  sfx(T.click, 'mouse', { gain: 1.2 });
+  sfx(T.expand - .1, 'reverse', { dur: T.end - T.expand + .1, gain: .8 });
+  sfx(T.end, 'snap', { gain: 1 });
+  L.pieces.forEach((_, i) => { if (i > 0) sfx(T.fan0 + (i - 1) * T.fanDt + .2, 'tick', { gain: .85, pitch: SCALE[i - 1], base: B5, tonal: true }); });
+  sfx(T.logoMove, 'whoosh', { dur: .4, gain: .6, pan: -.5, f0: 1500, f1: 5000 });
+  sfx(T.bars, 'dash', { dur: .28, gain: .85, pan: -.8 });
+  sfx(T.bars + .04, 'dash', { dur: .28, gain: .85, pan: .8 });
+  sfx(T.settle, 'click', { gain: 1, pitch: .95 });
+  for (let i = 0; i < T.urlTxt.length; i++) sfx(T.url0 + i * T.urlDt, 'type', { gain: .9, seed: 50 + i });
+  sfx(T.shine, 'sparkle', { gain: .6, notes: [1975.5, 2637.0, 2960.0, 3951.1, 5274.0, 5919.9] });
+}
+(VARIANT === 'funk' ? sfxFunk : sfxV1)();
 
 window.T = T; window.SFX = SFX; window.DUR = DUR;
 window.render = render;

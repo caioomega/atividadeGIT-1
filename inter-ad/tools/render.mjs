@@ -5,6 +5,7 @@
 //        sub  = subquadros por quadro (motion blur, obturador de 180°)
 //        jobs = processos em paralelo (cada um renderiza um trecho)
 //   node tools/render.mjs sfx <out.json>                     -> exporta a lista de efeitos sonoros
+// Variável AD_VARIANT=funk renderiza a versão com a música (ad.html?v=funk).
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
@@ -13,7 +14,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const self = fileURLToPath(import.meta.url);
-const pageUrl = 'file://' + path.resolve(here, '..', 'ad.html');
+// AD_VARIANT=funk seleciona a variante sincronizada com a música (ad.html?v=funk)
+const pageUrl = 'file://' + path.resolve(here, '..', 'ad.html') + (process.env.AD_VARIANT ? `?v=${process.env.AD_VARIANT}` : '');
 const [mode, out, ...rest] = process.argv.slice(2);
 
 const run = (cmd, args) => new Promise((res, rej) => {
