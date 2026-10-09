@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Protefort Reels</title>
+<style>
+  @font-face { font-family: 'Poppins'; font-weight: 400; src: url('node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 600; src: url('node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 700; src: url('node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 800; src: url('node_modules/@fontsource/poppins/files/poppins-latin-800-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Poppins'; font-weight: 900; src: url('node_modules/@fontsource/poppins/files/poppins-latin-900-normal.woff2') format('woff2'); }
+  :root { --ink: #363435; --orange: #F58634; --gray: #858688; --bg: #F6F4F1; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  body { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; }
+  #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  #bg, #cam, #shake, .scene, .layer { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+  #bg .dots { position: absolute; inset: -100px; background-image: radial-gradient(#dcd8d3 2.4px, transparent 2.6px); background-size: 54px 54px; opacity: .55; }
+  .blob { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(245,134,52,.13) 0%, rgba(245,134,52,0) 68%); }
+  .scene { visibility: hidden; }
+  .txt { position: absolute; white-space: nowrap; line-height: 1; text-align: center; }
+  .txt .ch, .txt .wd { display: inline-block; white-space: pre; }
+  .mask { overflow: hidden; padding: 0.12em 0.08em 0.16em; }
+  .mask > .in { display: inline-block; }
+  .shadow { text-shadow: 0.055em 0.055em 0 rgba(133,134,136,.42); }
+  .abs { position: absolute; }
+  .chip { position: absolute; width: 800px; height: 200px; border-radius: 100px; background: #fff; box-shadow: 0 24px 60px rgba(54,52,53,.12); display: flex; align-items: center; padding-left: 24px; }
+  .chip .ic { width: 152px; height: 152px; border-radius: 50%; background: var(--orange); color: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
+  .chip .ic svg { width: 88px; height: 88px; position: absolute; }
+  .chip .lb { margin-left: 44px; font-weight: 900; font-size: 92px; color: var(--ink); letter-spacing: -2px; }
+  .card { position: absolute; background: #fff; border-radius: 64px; box-shadow: 0 30px 80px rgba(54,52,53,.12); overflow: hidden; }
+  .pill { position: absolute; white-space: nowrap; border-radius: 999px; display: flex; align-items: center; }
+  .tile { position: absolute; width: 410px; height: 410px; border-radius: 56px; background: #444244; border: 3px solid #504e4f; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; }
+  .tile svg { width: 180px; height: 180px; }
+  .tile .lb { font-weight: 800; font-size: 54px; color: #fff; letter-spacing: 1px; }
+  .ring { position: absolute; border-radius: 50%; border: 10px solid var(--orange); }
+  .hazard { position: absolute; height: 40px; width: 1500px; left: -210px; background: repeating-linear-gradient(-45deg, var(--orange) 0 32px, var(--ink) 32px 64px); }
+  svg { overflow: visible; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="mbx" x="-60%" y="-10%" width="220%" height="120%"><feGaussianBlur id="mbxb" stdDeviation="0 0"/></filter>
+    <filter id="mby" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur id="mbyb" stdDeviation="0 0"/></filter>
+  </defs>
+</svg>
+<div id="stage">
+  <div id="bg"><div class="dots"></div></div>
+  <div id="cam"><div id="shake"></div></div>
+  <div id="fx" class="layer"></div>
+</div>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="icons.js"></script>
+<script src="logo.js"></script>
+<script src="cues.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
