@@ -1,6 +1,6 @@
 # Protefort Calçados: Reels em motion graphics
 
-**Formato:** 1080×1920 (9:16), 30 fps, 35,5 s. H.264 + AAC, mixado em -14 LUFS.
+**Formato:** 1080×1920 (9:16), **60 fps**, 35,5 s. H.264 High + AAC 256k, mixado em -14 LUFS.
 **Paleta (tirada do logo):** laranja `#F58634`, grafite `#363435`, cinza `#858688`, fundo off-white `#F6F4F1`.
 **Fonte:** Poppins (400–900).
 **Estilo:** baseado no vídeo de referência. Fundo claro, tipografia cinética, ícones e cards que "pulam", telas cheias na cor da marca, câmera com tremor nos impactos, logo animado no final.
@@ -9,8 +9,8 @@
 
 | Arquivo | O que é |
 |---|---|
-| `protefort_reels_sem_locucao.mp4` | Vídeo completo com trilha + efeitos sonoros (sem locução) |
-| `protefort_reels_sem_locucao_so_efeitos.mp4` | Só os efeitos, para colocar uma música do próprio Instagram |
+| `protefort_reels_60fps.mp4` | Vídeo completo em 60 fps com trilha + desenho de som (sem locução) |
+| `protefort_reels_60fps_so_efeitos.mp4` | Só os efeitos sonoros, para colocar uma música do próprio Instagram |
 | `projeto/` | Código-fonte da animação (HTML/GSAP), da trilha e do pipeline de render |
 
 ## Locução (ElevenLabs v4)
@@ -62,8 +62,30 @@ Fontes: [site oficial](https://www.protefortcalcados.com.br/) · [setor agroneg�
 
 **Para conferir com o cliente:** os "25 anos" (o CNPJ é de 2010; o perfil no LinkedIn diz fundação em 2003; o Instagram, 2001) e o @ do Instagram no CTA.
 
+## Desenho de som
+
+São 184 efeitos sincronizados com os movimentos, cada um com pequenas variações de tom e posição no estéreo. Todos foram calibrados para um volume equilibrado, e a trilha abaixa sozinha nos impactos.
+
+| Efeito | Onde entra |
+|---|---|
+| **Whip** (whoosh grande) | Transições de cena (whip pans, wipe diagonal) |
+| **Dash** (whoosh curto) | Cards, produtos, faixas e blocos deslizando |
+| **Swish** | Textos que sobem por máscara |
+| **Tap** | Cada palavra/letra que pula (efeito de digitação) |
+| **Click** (mouse) | Cards virando ✓, troca de produto, blocos dos setores, CTA |
+| **Pop / Boop** | Ícones e botões aparecendo (com tom subindo em sequência) |
+| **Check** | Sino de confirmação nos 3 cards (dó–mi–sol) |
+| **Tick** | Contador 0→25 (tom subindo) |
+| **Marker** | Marca-texto passando em "BRASIL" e "DE VERDADE!" |
+| **Sonar** | Pings do pin de Mococa |
+| **Zip / Whomp** | Círculos laranja abrindo/fechando, junção do PROTEFORT |
+| **Suck + Hit / Impact + Debris** | "PESADO?", botina, "TUDO", "PASSO", "FORTE", logo |
+| **Stamp** | Selo C.A. |
+| **Passos** | Pegadas atravessando a tela |
+| **Riser + Shimmer + Ding** | Montagem do logo, contador e CTA |
+
 ## Observações
 
-- **Trilha:** o conector do ElevenLabs disponível não gera música, então a batida (124 BPM, com "drop" no logo) e os efeitos foram sintetizados no código. Dá para trocar por uma música licenciada ou usar a versão "só efeitos" com um áudio do Instagram.
+- **Trilha e efeitos:** o conector do ElevenLabs disponível não gera música, e os efeitos de lá custam 200 créditos por geração (a conta tem 61). Por isso a batida (124 BPM, com "drop" no logo) e todos os efeitos foram sintetizados no código. Dá para trocar a música por uma licenciada ou usar a versão "só efeitos" com um áudio do Instagram.
 - **Produtos:** o site da Protefort estava bloqueado pela rede do ambiente, então os calçados são ilustrações vetoriais na paleta da marca, não fotos reais. Com fotos/PNGs dos produtos, dá para trocar no carrossel.
 - **Áreas seguras do Reels:** textos importantes ficam entre y≈250 e y≈1510, fora da área da legenda e dos botões.

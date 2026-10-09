@@ -5,7 +5,7 @@ const $shake = document.getElementById('shake');
 const $fx = document.getElementById('fx');
 const $bg = document.getElementById('bg');
 const SFX = [];
-const S = (t, type, g = 1) => SFX.push({ t: +Math.max(0, t).toFixed(3), type, g });
+const S = (t, type, g = 1, o = {}) => SFX.push({ t: +Math.max(0, t).toFixed(3), type, g, ...o });
 
 let seed = 20251;
 const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -53,14 +53,20 @@ const hide = (s, t) => tl.set(s, { visibility: 'hidden' }, t);
 function maskUp(o, t, { dur = 0.55, stagger = 0 } = {}) {
   const tg = stagger && o.parts.length ? o.parts : o.inner;
   tl.fromTo(tg, { yPercent: 125 }, { yPercent: 0, duration: dur, ease: 'power4.out', stagger }, t);
+  S(t + 0.02, 'swish', 0.32, { p: R(0.9, 1.15), pan: R(-0.3, 0.3) });
 }
 function popParts(o, t, { stagger = 0.04, y = 70, dur = 0.5, rot = 0, ease = 'back.out(2.2)' } = {}) {
   tl.fromTo(o.parts, { y, opacity: 0, scale: 0.6, rotation: rot }, { y: 0, opacity: 1, scale: 1, rotation: 0, duration: dur, ease, stagger }, t);
+  const n = o.parts.length;
+  o.parts.forEach((_, i) => S(t + i * stagger + 0.03, 'tap', 0.42, { p: R(0.9, 1.1) * (1 + 0.25 * i / Math.max(1, n - 1)), pan: n > 1 ? -0.45 + 0.9 * i / (n - 1) : 0 }));
 }
-function popIn(el, t, { dur = 0.5, from = 0, ease = 'back.out(2)', rot = 0 } = {}) {
+function popIn(el, t, { dur = 0.5, from = 0, ease = 'back.out(2)', rot = 0, sfx = true, p = 1 } = {}) {
   tl.fromTo(el, { scale: from, opacity: 0, rotation: rot }, { scale: 1, opacity: 1, rotation: 0, duration: dur, ease }, t);
+  if (sfx) S(t + 0.01, 'pop', 0.75, { p: p * R(0.95, 1.08) });
 }
-function slam(el, t, { from = 3, dur = 0.22, blur = 16 } = {}) {
+function slam(el, t, { from = 3, dur = 0.22, blur = 16, sfx = 'hit', suck = true } = {}) {
+  if (suck) S(t - 0.02, 'suck', 0.5);
+  if (sfx !== 'none') S(t, sfx, sfx === 'hit' ? 0.85 : 0.9);
   // lands exactly at t
   tl.fromTo(el, { scale: from, opacity: 0, filter: `blur(${blur}px)` }, { scale: 1, opacity: 1, filter: 'blur(0px)', duration: dur, ease: 'power4.in' }, t - dur);
   tl.to(el, { keyframes: [{ scale: 0.92, duration: 0.06 }, { scale: 1.04, duration: 0.1 }, { scale: 1, duration: 0.18 }] }, t);
@@ -84,6 +90,7 @@ function burst(parent, t, x, y, { n = 16, colors = [OR, INK, GR], dist = [120, 3
     const sq = rnd() < 0.35;
     const p = mk('div', 'abs', parent, `left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;height:${s}px;border-radius:${sq ? 4 : s}px;background:${colors[i % colors.length]};opacity:0`);
     const a = ((a0 + (a1 - a0) * rnd()) * Math.PI) / 180, d = R(dist[0], dist[1]);
+    if (i === 0) S(t + 0.02, 'debris', Math.min(0.8, 0.25 + n / 40), { pan: (x - 540) / 700 });
     tl.fromTo(p, { x: 0, y: 0, scale: 1, opacity: 1, rotation: 0 }, { x: Math.cos(a) * d, y: Math.sin(a) * d + grav, scale: 0, opacity: 1, rotation: R(-200, 200), duration: dur * R(0.7, 1.1), ease: 'power3.out', immediateRender: false }, t);
   }
 }
@@ -99,7 +106,8 @@ function whip(t, outS, inS, { axis = 'x', sign = 1 } = {}) {
   tl.fromTo(inS, { [axis]: D * sign }, { [axis]: 0, duration: 0.36, ease: 'power3.out' }, t + 0.1);
   hide(outS, t + 0.24);
   tl.set([outS, inS], { filter: 'none' }, t + 0.5);
-  S(t, 'whoosh');
+  S(t + 0.06, 'whip', 1, { pan: axis === 'x' ? 0 : 0.01 });
+  S(t + 0.2, 'swish', 0.3, { p: 1.3 });
 }
 function sceneZoom(z, t0, t1, to = 1.04) { tl.fromTo(z, { scale: 1 }, { scale: to, duration: Math.max(0.1, t1 - t0), ease: 'none' }, t0); }
 
@@ -129,7 +137,7 @@ function build() {
   sceneZoom(A.z, 0, c.entao - 0.2, 1.05);
   tl.fromTo(wipeLogo, { scale: 1 }, { scale: 0.6, opacity: 0, duration: 0.25, ease: 'power2.in' }, 0);
   tl.fromTo(wipe0, { yPercent: 0 }, { yPercent: -100, duration: 0.42, ease: 'power3.inOut' }, 0.04);
-  S(0.02, 'whoosh', 0.9);
+  S(0.0, 'whip', 0.9); S(0.24, 'dash', 0.45, { pan: -0.7, p: 1.1 }); S(0.3, 'dash', 0.45, { pan: 0.7, p: 0.95 });
   tl.fromTo([hz1, hz2], { xPercent: (i) => (i ? 30 : -30), opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.2);
   tl.fromTo([hz1, hz2], { backgroundPosition: '0px 0px' }, { backgroundPosition: (i) => (i ? '905px 0px' : '-905px 0px'), duration: 6, ease: 'none' }, 0);
   maskUp(t1a, Math.max(0.12, c.seu - 0.12));
@@ -141,7 +149,7 @@ function build() {
   shake(c.pesado, 34);
   burst(A.z, c.pesado, 540, 1290, { n: 22, colors: [GR, '#b9b7b5', OR], dist: [160, 520], a0: 160, a1: 380, size: [10, 24] });
   ring(A.z, c.pesado, 540, 1300, { size: 260, sy: 0.22, scale: 5, border: 8 });
-  S(c.pesado - 0.28, 'whoosh_down', 0.8); S(c.pesado, 'impact', 1.1);
+  S(c.pesado - 0.3, 'whoosh_down', 0.75); S(c.pesado, 'impact', 1.1);
   tl.to(t1d.wrap, { scale: 1.04, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' }, c.pesado + 0.42);
 
   /* ===== S2 — calçado FORTE ===== */
@@ -160,14 +168,15 @@ function build() {
   popParts(t2c, Math.min(c.calcado + 0.42, c.forte - 0.5), { stagger: 0.08, y: 40 });
   tl.fromTo(boot2, { y: -1750, rotation: -16 }, { y: 0, rotation: 0, duration: 0.32, ease: 'power4.in' }, c.forte - 0.32);
   tl.to(boot2, { keyframes: [{ scaleY: 0.88, scaleX: 1.06, duration: 0.07 }, { scaleY: 1.04, scaleX: 0.98, duration: 0.12 }, { scaleY: 1, scaleX: 1, duration: 0.2 }] }, c.forte);
-  slam(t2d.wrap, c.forte + 0.02, { from: 3.2 });
+  slam(t2d.wrap, c.forte + 0.02, { from: 3.2, sfx: 'none', suck: false });
+  S(c.forte - 0.55, 'suck', 0.45);
   shake(c.forte, 42, 0.5);
   ring(B.z, c.forte, 540, 1520, { size: 300, sy: 0.24, scale: 4.2, border: 9 });
   ring(B.z, c.forte + 0.1, 540, 1520, { size: 300, sy: 0.24, scale: 3, border: 6, color: GR });
   burst(B.z, c.forte, 540, 1515, { n: 26, colors: [GR, '#b9b7b5', OR, INK], dist: [200, 560], a0: 170, a1: 370 });
   tl.fromTo(glow2, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.25, duration: 0.45, ease: 'power2.out' }, c.forte);
   tl.to(glow2, { opacity: 0.35, duration: 0.6 }, c.forte + 0.45);
-  S(c.forte - 0.32, 'whoosh_down', 0.9); S(c.forte, 'impact', 1.25);
+  S(c.forte - 0.34, 'whoosh_down', 0.9); S(c.forte, 'impact', 1.25); S(c.forte + 0.01, 'hit', 0.5);
   tl.to(boot2, { y: -14, duration: 0.5, yoyo: true, repeat: 1, ease: 'sine.inOut' }, c.forte + 0.45);
 
   /* ===== S3 — lama / impacto / horas ===== */
@@ -186,11 +195,11 @@ function build() {
   hide(B.s, tC + 0.27);
   show(Cc.s, tC + 0.1);
   sceneZoom(Cc.z, tC, c.protefort1 + 0.1, 1.035);
-  S(tC, 'whoosh', 0.7);
+  S(tC + 0.04, 'dash', 0.8, { p: 0.8 }); S(tC + 0.1, 'whomp', 0.35);
   chips.forEach(({ ch, icw, t }, i) => {
     tl.fromTo(ch, { scale: 0.2, opacity: 0, rotation: i % 2 ? 8 : -8, y: 90 }, { scale: 1, opacity: 1, rotation: 0, y: 0, duration: 0.55, ease: 'back.out(2)' }, t - 0.1);
     tl.fromTo(icw, { rotation: -140, scale: 0 }, { rotation: 0, scale: 1, duration: 0.55, ease: 'back.out(2.4)' }, t - 0.02);
-    S(t - 0.08, 'pop');
+    S(t - 0.08, 'pop', 0.9, { p: [1, 1.12, 1.26][i] }); S(t + 0.04, 'boop', 0.38, { p: [1, 1.12, 1.26][i], pan: -0.4 });
   });
   const tChk = c.protefort1 - 0.22;
   chips.forEach(({ ch, icw, i1, i2, l }, i) => {
@@ -201,7 +210,7 @@ function build() {
     tl.to(i1, { scale: 0, opacity: 0, duration: 0.14 }, t);
     tl.fromTo(i2, { scale: 0, opacity: 0, color: OR }, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(3)' }, t + 0.05);
     tl.to(ch, { keyframes: [{ scale: 1.07, duration: 0.08 }, { scale: 1, duration: 0.2 }] }, t);
-    S(t, 'click', 0.9);
+    S(t, 'click', 0.75, { pan: 0.2 }); S(t + 0.04, 'check', 0.55, { p: [1, 1.26, 1.5][i] });
   });
 
   /* ===== S4 — Protefort aguenta tudo (orange) ===== */
@@ -222,16 +231,15 @@ function build() {
   show(D.s, tD);
   tl.fromTo(D.s, { clipPath: 'circle(0px at 540px 890px)' }, { clipPath: 'circle(1300px at 540px 890px)', duration: 0.5, ease: 'power3.inOut' }, tD);
   hide(Cc.s, tD + 0.5);
-  S(tD, 'swoosh');
+  S(tD, 'whomp', 0.9); S(tD + 0.05, 'swish', 0.4, { p: 0.8 });
   sceneZoom(D.z, tD, c.direto - 0.2, 1.05);
   popIn(mono, tD + 0.22, { dur: 0.55, rot: -90, ease: 'back.out(1.8)' });
   decoRings.forEach((r, i) => tl.fromTo(r, { scale: 0.3, opacity: 0.9 }, { scale: 3.4, opacity: 0, duration: 1.4, ease: 'power1.out', repeat: 1 }, tD + 0.3 + i * 0.45));
   maskUp(t4a, Math.max(tD + 0.18, c.protefort1 + 0.15));
   tl.fromTo(t4b.wrap, { x: -900, filter: 'blur(22px)', opacity: 0 }, { x: 0, filter: 'blur(0px)', opacity: 1, duration: 0.38, ease: 'power4.out' }, c.aguenta - 0.06);
-  S(c.aguenta - 0.08, 'whoosh', 0.8);
-  slam(t4c.wrap, c.tudo, { from: 2.8 });
+  S(c.aguenta - 0.1, 'dash', 0.9, { pan: -0.6, p: 0.9 });
+  slam(t4c.wrap, c.tudo, { from: 2.8, sfx: 'impact' });
   shake(c.tudo, 24, 0.35);
-  S(c.tudo, 'impact', 0.85);
   popParts(t4d, c.comvoce, { stagger: 0.09, y: 50 });
   tl.to(t4c.wrap, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1, ease: 'sine.inOut' }, c.tudo + 0.4);
 
@@ -240,7 +248,7 @@ function build() {
   const tE = c.direto - 0.22;
   tl.to(D.z, { scale: 0.25, opacity: 0, duration: 0.3, ease: 'power3.in' }, tE);
   tl.to(D.s, { clipPath: 'circle(78px at 540px 640px)', duration: 0.42, ease: 'power3.inOut' }, tE);
-  S(tE, 'swoosh', 0.8);
+  S(tE, 'zipdown', 0.7);
   const gA = mk('div', 'layer', E.z);
   const gRings = [0, 1, 2].map(() => mk('div', 'ring', gA, 'left:440px;top:737px;width:200px;height:100px;border-width:6px;opacity:0'));
   const pin = mk('div', 'abs', gA, 'left:450px;top:553px;width:180px;height:240px;transform-origin:50% 100%', svgFill(ICONS.pin));
@@ -251,12 +259,12 @@ function build() {
   hide(D.s, tE + 0.42);
   sceneZoom(E.z, tE + 0.36, c.botinas - 0.2, 1.035);
   tl.fromTo(pin, { scaleY: 0.55, scaleX: 1 }, { scaleY: 1, duration: 0.7, ease: 'elastic.out(1.1,0.45)' }, tE + 0.38);
-  S(tE + 0.38, 'pop', 1);
+  S(tE + 0.38, 'pop', 1, { p: 0.72 }); S(tE + 0.48, 'sonar', 0.45); S(tE + 1.55, 'sonar', 0.28, { p: 1.06 });
   gRings.forEach((r, i) => tl.fromTo(r, { scale: 0.2, opacity: 1 }, { scale: 4, opacity: 0, duration: 1.1, ease: 'power2.out', repeat: 1 }, tE + 0.45 + i * 0.32));
   popParts(t5a, Math.max(tE + 0.4, c.direto), { stagger: 0.1, y: 40 });
   popParts(t5b, c.mococa - 0.05, { stagger: 0.045, y: 130, rot: 12, dur: 0.6 });
   maskUp(t5c, c.mococa + 0.35);
-  S(c.mococa - 0.05, 'swoosh', 0.7);
+  S(c.mococa - 0.08, 'swish', 0.45);
   // 25 anos
   const tAn = c.anos - 0.22;
   tl.to(gA, { y: -260, opacity: 0, duration: 0.3, ease: 'power3.in' }, tAn);
@@ -270,13 +278,15 @@ function build() {
   const cnt = { v: 0 };
   tl.fromTo(cnt, { v: 0 }, { v: 25, duration: 0.8, ease: 'power2.out', onUpdate: () => { num.wrap.textContent = Math.round(cnt.v); } }, tAn + 0.15);
   tl.fromTo('#arc', { attr: { 'stroke-dashoffset': CIRC } }, { attr: { 'stroke-dashoffset': 0 }, duration: 0.8, ease: 'power2.out' }, tAn + 0.15);
-  for (let i = 0; i < 9; i++) S(tAn + 0.15 + 0.8 * (1 - Math.sqrt(1 - i / 9)), 'tick', 0.55);
+  S(tAn, 'dash', 0.6, { p: 1.2 });
+  for (let i = 0; i < 12; i++) S(tAn + 0.15 + 0.8 * (1 - Math.sqrt(1 - i / 12)), 'tick', 0.5, { p: 1 + i * 0.05 });
   tl.to(num.wrap, { keyframes: [{ scale: 1.14, duration: 0.08 }, { scale: 1, duration: 0.25, ease: 'back.out(3)' }] }, tAn + 0.95);
-  S(tAn + 0.95, 'ding', 0.8);
+  S(tAn + 0.95, 'ding', 0.75); S(tAn + 0.97, 'shimmer', 0.4);
   slam(anos.wrap, Math.min(tAn + 0.75, c.protegendo - 0.4), { from: 2.4, blur: 10 });
   // protegendo quem faz o Brasil acontecer
   const tPr = c.protegendo - 0.18;
   tl.to(gB, { scale: 0.42, y: -380, duration: 0.45, ease: 'power3.inOut' }, tPr);
+  S(tPr + 0.05, 'dash', 0.5, { p: 1.15 });
   const t5d = T(E.z, 'PROTEGENDO QUEM', { y: 880, size: 82, w: 800, mask: true, ls: -1 });
   const l2 = mk('div', 'txt mask', E.z, `left:540px;top:1010px;font-size:108px;font-weight:900;color:${INK};letter-spacing:-3px`);
   gsap.set(l2, { xPercent: -50, yPercent: -50 });
@@ -291,7 +301,7 @@ function build() {
   tl.fromTo(hlbar, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: 'power3.out' }, c.brasil - 0.06);
   tl.fromTo(hlt, { color: INK }, { color: '#fff', duration: 0.12 }, c.brasil);
   maskUp(t5f, c.brasil + 0.28);
-  S(c.brasil - 0.06, 'swoosh', 0.7);
+  S(c.brasil - 0.06, 'marker', 0.85);
 
   /* ===== S6 — linha completa ===== */
   const F = scene();
@@ -309,6 +319,7 @@ function build() {
   const labs = ['BOTINAS', 'COTURNOS', 'TÊNIS', 'SAPATOS'].map((w) => mk('div', 'abs', lab, `left:0;top:20px;width:1000px;text-align:center;font-weight:900;font-size:140px;letter-spacing:-4px;color:${INK}`, w));
   const segLab = mk('div', 'abs', lab, `left:0;top:30px;width:1000px;text-align:center`, `<span style="display:inline-block;background:${OR};color:#fff;font-weight:900;font-size:104px;letter-spacing:-2px;padding:6px 38px 2px;border-radius:24px">DE SEGURANÇA</span>`);
   tl.fromTo(pill6, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.45, ease: 'back.out(2)' }, tF + 0.25);
+  S(tF + 0.27, 'boop', 0.4, { p: 1.3 });
   popIn(card, tF + 0.2, { from: 0.6, dur: 0.5, ease: 'back.out(1.6)' });
   const pt = [c.botinas, c.coturnos, c.tenis, c.sapatos];
   pt.forEach((t, i) => {
@@ -320,10 +331,11 @@ function build() {
     tl.fromTo(prods[i], { x: 900, rotation: 14, opacity: 0 }, { x: 0, rotation: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.5)' }, t - 0.06);
     tl.fromTo(labs[i], { yPercent: 170 }, { yPercent: 0, duration: 0.45, ease: 'power4.out' }, t - 0.04);
     tl.set(nums[i], { opacity: 1 }, t - 0.02);
-    S(t - 0.08, 'whoosh', 0.55);
+    S(t - 0.1, 'dash', 0.72, { pan: 0.5, p: R(0.9, 1.1) }); S(t + 0.12, 'click', 0.35, { p: 1.3 });
   });
   const tSeg = c.seguranca - 0.12;
   tl.to(card, { scale: 0.4, opacity: 0, duration: 0.25, ease: 'power3.in' }, tSeg);
+  S(tSeg, 'zipdown', 0.45); S(tSeg + 0.32, 'hit', 0.5);
   tl.to(labs[3], { yPercent: -130, duration: 0.28, ease: 'power3.in' }, tSeg);
   tl.fromTo(segLab, { yPercent: 220 }, { yPercent: 0, duration: 0.45, ease: 'power4.out' }, tSeg + 0.1);
   const grid = [[305, 800], [775, 800], [305, 1170], [775, 1170]].map(([x, y], i) => {
@@ -331,7 +343,7 @@ function build() {
     mk('div', 'abs', g, `left:95px;top:50px;width:240px;height:240px;border-radius:50%;background:${OR}`);
     mk('div', 'abs', g, 'left:25px;top:25px;width:380px;height:290px', svgFill(ICONS[['botina', 'coturno', 'tenis', 'sapato'][i]]));
     tl.fromTo(g, { scale: 0, opacity: 0, rotation: i % 2 ? 10 : -10 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.45, ease: 'back.out(1.8)' }, tSeg + 0.12 + i * 0.07);
-    S(tSeg + 0.12 + i * 0.07, 'pop', 0.7);
+    S(tSeg + 0.12 + i * 0.07, 'pop', 0.7, { p: 1 + i * 0.12, pan: i % 2 ? 0.4 : -0.4 });
     return g;
   });
 
@@ -351,11 +363,12 @@ function build() {
   shake(c.ca, 18, 0.3);
   ring(G.z, c.ca, 540, 780, { size: 380, scale: 2.4, border: 8 });
   burst(G.z, c.ca, 540, 780, { n: 14, colors: [OR, GR], dist: [250, 420], size: [10, 20] });
-  S(c.ca, 'stamp', 1);
+  S(c.ca - 0.3, 'suck', 0.45); S(c.ca, 'stamp', 1); S(c.ca + 0.06, 'shimmer', 0.3);
   maskUp(t7b, c.ca + 0.18);
   // bidensidade
   const tBi = c.bidensidade - 0.28;
   tl.to(shield, { scale: 0.4, y: -420, duration: 0.42, ease: 'power3.inOut' }, tBi);
+  S(tBi + 0.05, 'dash', 0.5, { p: 1.2 });
   tl.to([t7a.wrap, t7b.wrap], { opacity: 0, y: -40, duration: 0.25 }, tBi);
   const gBi = mk('div', 'layer', G.z);
   const t7c = T(gBi, 'SOLADO', { y: 560, size: 60, w: 700, color: GR, mask: true, ls: 8 });
@@ -371,23 +384,24 @@ function build() {
   maskUp(t7d, c.bidensidade + 0.02);
   tl.fromTo(top, { x: -1100 }, { x: 0, duration: 0.45, ease: 'power4.out' }, c.bidensidade + 0.12);
   tl.fromTo(bot, { x: 1100 }, { x: 0, duration: 0.45, ease: 'power4.out' }, c.bidensidade + 0.2);
-  S(c.bidensidade + 0.1, 'whoosh', 0.6); S(c.bidensidade + 0.2, 'whoosh', 0.5);
+  S(c.bidensidade + 0.08, 'dash', 0.6, { pan: -0.7 }); S(c.bidensidade + 0.18, 'dash', 0.6, { pan: 0.7, p: 0.85 }); S(c.bidensidade + 0.5, 'click', 0.55, { p: 0.6 });
+  S(c.conforto - 0.3, 'whomp', 0.35, { p: 1.3 });
   tl.to(top, { y: -50, duration: 0.35, ease: 'power3.inOut' }, c.conforto - 0.3);
   tl.to(bot, { y: 50, duration: 0.35, ease: 'power3.inOut' }, c.conforto - 0.3);
   popIn(pC, c.conforto - 0.05, { dur: 0.45, ease: 'back.out(2.4)' });
   popIn(pF, c.firmeza - 0.05, { dur: 0.45, ease: 'back.out(2.4)' });
-  S(c.conforto - 0.05, 'pop'); S(c.firmeza - 0.05, 'pop');
+  S(c.conforto - 0.03, 'boop', 0.4, { p: 1.2 }); S(c.firmeza - 0.03, 'boop', 0.4, { p: 0.9 });
   // primeiro ao último passo
   const tPa = c.primeiro - 0.22;
   tl.to(gBi, { y: -220, opacity: 0, duration: 0.3, ease: 'power3.in' }, tPa);
+  S(tPa, 'dash', 0.55, { p: 1.1 });
   tl.to(shield, { opacity: 0, scale: 0.2, duration: 0.25 }, tPa);
   const t7e = T(G.z, 'DO PRIMEIRO', { y: 720, size: 92, w: 800, mask: true, ls: -2 });
   const t7f = T(G.z, 'AO ÚLTIMO', { y: 840, size: 92, w: 800, mask: true, ls: -2 });
   const t7g = T(G.z, 'PASSO', { y: 1030, size: 236, w: 900, color: OR, ls: -8, shadow: true });
   maskUp(t7e, c.primeiro);
   maskUp(t7f, Math.min(c.primeiro + 0.4, c.passo - 0.3));
-  slam(t7g.wrap, c.passo, { from: 2.6 });
-  S(c.passo, 'impact', 0.7);
+  slam(t7g.wrap, c.passo, { from: 2.6, sfx: 'impact' });
   const nSteps = 6;
   for (let i = 0; i < nSteps; i++) {
     const x = 150 + i * 156, y = 1380 + (i % 2 ? 58 : -58);
@@ -395,7 +409,7 @@ function build() {
     const t = c.primeiro + i * Math.min(0.16, (c.obra - c.primeiro - 0.6) / nSteps);
     tl.fromTo(fp, { rotation: 90, scale: 0, opacity: 0 }, { rotation: 90, scale: 1, opacity: i === nSteps - 1 ? 1 : 0.85, duration: 0.25, ease: 'back.out(2.5)' }, t);
     if (i < nSteps - 1) tl.to(fp, { opacity: 0.18, duration: 0.6 }, t + 0.5);
-    S(t, 'step', 0.6);
+    S(t, 'step', 0.8, { pan: -0.7 + i * 0.28, p: R(0.92, 1.08) });
   }
 
   /* ===== S8 — setores (dark) ===== */
@@ -417,7 +431,7 @@ function build() {
   tl.fromTo(diag, { x: -1700, opacity: 1 }, { x: 2300, duration: 0.6, ease: 'power3.inOut' }, tH - 0.1);
   show(H.s, tH + 0.18);
   hide(G.s, tH + 0.2);
-  S(tH - 0.1, 'whoosh', 0.9);
+  S(tH - 0.05, 'whip', 1, { p: 0.9 });
   sceneZoom(H.z, tH + 0.18, c.protecao - 0.2, 1.035);
   tl.fromTo(hdots, { y: 0 }, { y: -108, duration: 4, ease: 'none' }, tH);
   maskUp(t8a, tH + 0.3);
@@ -430,7 +444,7 @@ function build() {
       tl.to(tiles[i - 1].tile, { backgroundColor: TILE, borderColor: '#504e4f', duration: 0.2 }, t);
       tl.to(tiles[i - 1].iw, { color: OR, duration: 0.2 }, t);
     }
-    S(t - 0.08, 'pop', 0.9);
+    S(t - 0.08, 'pop', 0.85, { p: [1, 1.12, 1.26, 1.5][i], pan: i % 2 ? 0.45 : -0.45 }); S(t, 'click', 0.5, { pan: i % 2 ? 0.45 : -0.45 }); S(t + 0.02, 'boop', 0.35, { p: [1, 1.12, 1.26, 1.5][i] });
   });
 
   /* ===== S9 — PROTEÇÃO + FORTE = PROTEFORT → logo → CTA ===== */
@@ -438,11 +452,12 @@ function build() {
   const tI = c.protecao - 0.22;
   tiles.forEach(({ tile }, i) => tl.to(tile, { x: 540 - (i % 2 ? 775 : 305), y: 1035 - (i < 2 ? 800 : 1270), scale: 0, duration: 0.3, ease: 'power3.in' }, tI + i * 0.03));
   tl.to(t8a.wrap, { opacity: 0, duration: 0.2 }, tI);
+  S(tI, 'zipdown', 0.6);
   show(I.s, tI + 0.25);
   tl.to(bgTop, { y: -980, duration: 0.42, ease: 'power3.inOut' }, tI + 0.25);
   tl.to(bgBot, { y: 980, duration: 0.42, ease: 'power3.inOut' }, tI + 0.25);
   hide(H.s, tI + 0.7);
-  S(tI + 0.25, 'swoosh', 0.8);
+  S(tI + 0.25, 'whomp', 0.85);
   const gM = mk('div', 'layer', I.z, 'transform-origin:540px 935px');
   const wP = T(gM, 'PROTEÇÃO', { y: 860, size: 136, w: 900, split: 'chars', ls: -4 });
   const wF = T(gM, 'FORTE', { y: 1010, size: 136, w: 900, color: OR, split: 'chars', ls: -4 });
@@ -456,8 +471,7 @@ function build() {
     [wF.parts[0], fr[0], tr[5]], [wF.parts[1], fr[1], tr[6]], [wF.parts[2], fr[2], tr[7]], [wF.parts[3], fr[3], tr[8]]];
   const drop = [wP.parts[5], wP.parts[6], wP.parts[7], wF.parts[4]];
   popParts(wP, c.protecao - 0.04, { stagger: 0.035, y: 110, dur: 0.5 });
-  S(c.protecao - 0.04, 'swoosh', 0.7);
-  slam(wF.wrap, c.forte2, { from: 2.6 });
+  slam(wF.wrap, c.forte2, { from: 2.6, sfx: 'none' });
   shake(c.forte2, 26, 0.35);
   ring(I.z, c.forte2, 540, 1010, { size: 300, scale: 3.2, border: 8, sy: 0.5 });
   S(c.forte2, 'impact', 1);
@@ -465,11 +479,11 @@ function build() {
   drop.forEach((p, i) => tl.to(p, { y: 520, rotation: R(-70, 70), opacity: 0, duration: 0.45, ease: 'power2.in' }, tm + i * 0.03));
   S(tm, 'whoosh_down', 0.6);
   keep.forEach(([p, a, b]) => tl.to(p, { x: b.left - a.left, y: b.top - a.top, duration: 0.42, ease: 'power3.inOut' }, tm + 0.1));
-  S(tm + 0.3, 'click', 0.8);
+  S(tm + 0.1, 'zip', 0.65); S(tm + 0.5, 'click', 0.9, { p: 0.8 });
   tl.to(gM, { keyframes: [{ scale: 1.13, duration: 0.09 }, { scale: 1, duration: 0.3, ease: 'back.out(3)' }] }, c.protefort);
   const flash = mk('div', 'abs', $fx, 'inset:0;background:#fff;opacity:0');
   tl.fromTo(flash, { opacity: 0.85 }, { opacity: 0, duration: 0.35, ease: 'power2.out', immediateRender: false }, c.protefort);
-  S(c.protefort, 'ding', 1);
+  S(c.protefort, 'hit', 0.6); S(c.protefort, 'ding', 0.9); S(c.protefort + 0.02, 'shimmer', 0.55);
   // logo reveal
   const tL = c.protefort + 0.4;
   tl.to(gM, { y: 30, scale: 0.8, duration: 0.5, ease: 'power3.inOut' }, tL);
@@ -482,11 +496,11 @@ function build() {
   tl.fromTo(lP, { y: -1000, rotation: -12, opacity: 1 }, { y: 0, rotation: 0, opacity: 1, duration: 0.4, ease: 'power4.in' }, tL + 0.05);
   tl.to(lP, { keyframes: [{ scaleY: 0.86, scaleX: 1.06, duration: 0.07 }, { scaleY: 1.04, scaleX: 0.98, duration: 0.12 }, { scaleY: 1, scaleX: 1, duration: 0.2 }] }, tL + 0.45);
   shake(tL + 0.45, 20, 0.3);
-  S(tL + 0.05, 'whoosh_down', 0.7); S(tL + 0.45, 'impact', 0.9);
+  S(tL + 0.45, 'riser', 0.5, { d: 0.9 }); S(tL + 0.05, 'whoosh_down', 0.7); S(tL + 0.45, 'impact', 0.95);
   tl.fromTo(lSh, { x: -36, y: -36, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.35, ease: 'power3.out' }, tL + 0.5);
   tl.fromTo('#rmc', { attr: { 'stroke-dashoffset': LC } }, { attr: { 'stroke-dashoffset': 0 }, duration: 0.6, ease: 'power2.inOut' }, tL + 0.5);
   tl.fromTo(lRing, { rotation: -30, scale: 0.9 }, { rotation: 0, scale: 1, duration: 0.8, ease: 'back.out(1.6)' }, tL + 0.5);
-  S(tL + 0.5, 'swoosh', 0.8);
+  S(tL + 0.5, 'swish', 0.6, { p: 0.8 }); S(tL + 0.62, 'shimmer', 0.6); S(tL + 0.52, 'boop', 0.3, { p: 0.75 });
   burst(I.z, tL + 0.48, 540, 600, { n: 22, colors: [OR, GR, INK], dist: [260, 520], size: [10, 22] });
   ring(I.z, tL + 0.46, 540, 600, { size: 400, scale: 2.6, border: 6 });
   const t9a = T(I.z, 'CALÇADOS PROFISSIONAIS', { y: 1048, size: 40, w: 700, color: GR, mask: true, ls: 8 });
@@ -503,9 +517,10 @@ function build() {
   tl.fromTo(vbBar, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: 'power3.out' }, c.verdade - 0.12);
   tl.fromTo(vbT, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(2.5)' }, c.verdade - 0.02);
   shake(c.verdade, 12, 0.25);
-  S(c.verdade - 0.12, 'swoosh', 0.7); S(c.verdade, 'impact', 0.6);
+  S(c.verdade - 0.12, 'marker', 0.8); S(c.verdade, 'hit', 0.75);
   // CTA
   tl.to(gT, { y: -60, opacity: 0, duration: 0.3, ease: 'power3.in' }, c.cta - 0.1);
+  S(c.cta - 0.1, 'dash', 0.5, { p: 1.2 });
   const ctas = [['globo', 'protefortcalcados.com.br'], ['insta', '@protefortcalcados'], ['local', 'Mococa • SP']].map(([ic, txt], i) => {
     const p = mk('div', 'pill', I.z, `left:540px;top:${1215 + i * 122}px;height:100px;padding:0 44px 0 14px;background:#fff;box-shadow:0 18px 44px rgba(54,52,53,.12);gap:24px`);
     gsap.set(p, { xPercent: -50, yPercent: -50 });
@@ -513,10 +528,11 @@ function build() {
     mk('div', null, icw, 'width:42px;height:42px;color:#fff', svgFill(ICONS[ic]));
     mk('div', null, p, `font-weight:${i ? 700 : 800};font-size:44px;color:${INK}`, txt);
     tl.fromTo(p, { y: 80, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, c.cta + 0.1 + i * 0.13);
-    S(c.cta + 0.1 + i * 0.13, 'pop', 0.7);
+    S(c.cta + 0.1 + i * 0.13, 'pop', 0.7, { p: 1 + i * 0.12 }); S(c.cta + 0.16 + i * 0.13, 'click', 0.45, { p: 1.1 });
     return p;
   });
   tl.to(ctas[0], { scale: 1.05, duration: 0.4, yoyo: true, repeat: 3, ease: 'sine.inOut' }, c.cta + 1.0);
+  S(c.cta + 0.6, 'shimmer', 0.35);
   tl.set({}, {}, END);
 }
 
