@@ -1,0 +1,4 @@
+build/
+__pycache__/
+# gerados por tools/textures.py
+assets/*.png

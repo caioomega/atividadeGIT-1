@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Café Santa Luzia — Reels 30s</title>
+<style>
+  @font-face { font-family: 'Rye'; src: url('assets/fonts/Rye-Regular.ttf'); }
+  @font-face { font-family: 'Cinzel'; src: url('assets/fonts/Cinzel[wght].ttf'); font-weight: 400 900; }
+  @font-face { font-family: 'Fell'; src: url('assets/fonts/IMFeENrm28P.ttf'); font-style: normal; }
+  @font-face { font-family: 'Fell'; src: url('assets/fonts/IMFeENit28P.ttf'); font-style: italic; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0e0b08; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: #EAD9B5; }
+  .layer { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .abs { position: absolute; left: 0; top: 0; will-change: transform, opacity, filter; }
+  .paper { background: url('assets/paper_dark.png') center / cover; }
+  .center { width: 1080px; text-align: center; }
+  .gold {
+    background: linear-gradient(180deg, #F6E3A1 0%, #E2C06C 30%, #B98E3E 55%, #F0D78E 72%, #9C7432 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 3px 0 rgba(40, 24, 8, .9)) drop-shadow(0 10px 22px rgba(0, 0, 0, .55));
+  }
+  .cinzel { font-family: 'Cinzel', serif; font-weight: 700; text-transform: uppercase; }
+  .rye { font-family: 'Rye', serif; }
+  .fell { font-family: 'Fell', serif; font-style: italic; color: #EAD9B5; text-shadow: 0 4px 18px rgba(0,0,0,.8); }
+  .w { display: inline-block; will-change: transform, opacity, filter; }
+  svg { overflow: visible; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="goldG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#F6E3A1"/><stop offset=".35" stop-color="#D9B663"/>
+        <stop offset=".6" stop-color="#A57D36"/><stop offset=".8" stop-color="#EBD08A"/><stop offset="1" stop-color="#8C6A2C"/>
+      </linearGradient>
+      <linearGradient id="goldH" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8C6A2C"/><stop offset=".3" stop-color="#E8CB7A"/>
+        <stop offset=".55" stop-color="#C9A24E"/><stop offset=".75" stop-color="#F3DD9A"/><stop offset="1" stop-color="#8C6A2C"/>
+      </linearGradient>
+      <radialGradient id="cherryG" cx=".38" cy=".35" r=".7">
+        <stop offset="0" stop-color="#F06A55"/><stop offset=".45" stop-color="#B8281D"/><stop offset="1" stop-color="#5A0E0A"/>
+      </radialGradient>
+      <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#7C9A43"/><stop offset=".5" stop-color="#4E6A2B"/><stop offset="1" stop-color="#26360F"/>
+      </linearGradient>
+      <linearGradient id="beanG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#9A6438"/><stop offset=".55" stop-color="#5E3A1E"/><stop offset="1" stop-color="#2E1B0D"/>
+      </linearGradient>
+      <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-28)">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="#000" stroke-width="1.6" stroke-opacity=".45"/>
+      </pattern>
+      <pattern id="hatchLight" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
+        <line x1="0" y1="0" x2="0" y2="9" stroke="#F3DD9A" stroke-width="1" stroke-opacity=".18"/>
+      </pattern>
+      <filter id="ink1" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920" color-interpolation-filters="sRGB">
+        <feImage href="assets/ink_noise.png" x="0" y="0" width="1080" height="1920" preserveAspectRatio="none" result="n"/>
+        <feComponentTransfer in="n" result="m"><feFuncA id="ink1f" type="linear" slope="-12" intercept="0"/></feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="m" operator="in"/>
+      </filter>
+      <filter id="ink2" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920" color-interpolation-filters="sRGB">
+        <feImage href="assets/ink_center.png" x="0" y="0" width="1080" height="1920" preserveAspectRatio="none" result="n"/>
+        <feComponentTransfer in="n" result="m"><feFuncA id="ink2f" type="linear" slope="-12" intercept="0"/></feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="m" operator="in"/>
+      </filter>
+      <filter id="ink3" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920" color-interpolation-filters="sRGB">
+        <feImage href="assets/ink_bottom.png" x="0" y="0" width="1080" height="1920" preserveAspectRatio="none" result="n"/>
+        <feComponentTransfer in="n" result="m"><feFuncA id="ink3f" type="linear" slope="-12" intercept="0"/></feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="m" operator="in"/>
+      </filter>
+      <filter id="grainF" x="0" y="0" width="100%" height="100%">
+        <feTurbulence id="turb" type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="1"/>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <div id="s1" class="layer"></div>
+  <div id="s2" class="layer paper"></div>
+  <div id="s3" class="layer paper"></div>
+  <div id="s4" class="layer paper"></div>
+  <div id="s5" class="layer paper"></div>
+  <div id="s6" class="layer paper"></div>
+
+  <!-- efeitos de película -->
+  <div id="leak" class="layer" style="mix-blend-mode:screen;pointer-events:none"></div>
+  <svg id="grain" class="layer" width="1080" height="1920" style="mix-blend-mode:overlay;opacity:.16;pointer-events:none"><rect width="1080" height="1920" filter="url(#grainF)"/></svg>
+  <canvas id="dust" class="layer" width="1080" height="1920" style="pointer-events:none"></canvas>
+  <div id="vig" class="layer" style="pointer-events:none;background:radial-gradient(ellipse 75% 62% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%)"></div>
+  <div id="flick" class="layer" style="pointer-events:none;background:#000;opacity:0"></div>
+</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   Café Santa Luzia — Reels 30 s (1080x1920, 30 fps)
+   render(t) é função pura do tempo. O mesmo cronograma T gera a lista
+   de efeitos sonoros (window.SFX) e as marcas da trilha (window.MUSIC).
+   ===================================================================== */
+const W = 1080, H = 1920, DUR = 30;
+const BPM = 88, BEAT = 60 / BPM;            // trilha caipira (toada) a 88 BPM
+const GOLD = '#C9A24E', CREAM = '#EAD9B5';
+
+// ---------- util ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+const E = {
+  outCubic: p => 1 - Math.pow(1 - p, 3),
+  inCubic: p => p * p * p,
+  inOutCubic: p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2,
+  inOutSine: p => -(Math.cos(Math.PI * p) - 1) / 2,
+  outBack: (p, s = 1.70158) => 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2),
+  outBounce: p => {
+    const n = 7.5625, d = 2.75;
+    if (p < 1 / d) return n * p * p;
+    if (p < 2 / d) return n * (p -= 1.5 / d) * p + .75;
+    if (p < 2.5 / d) return n * (p -= 2.25 / d) * p + .9375;
+    return n * (p -= 2.625 / d) * p + .984375;
+  },
+};
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, cls, parent, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  parent.appendChild(e);
+  return e;
+}
+function rand(seed) { const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function set(e, o) {
+  const op = o.op ?? 1;
+  if (op <= 0.003) { if (e.style.display !== 'none') e.style.display = 'none'; return; }
+  if (e.style.display === 'none') e.style.display = '';
+  e.style.opacity = op.toFixed(3);
+  const sx = o.sx ?? o.s ?? 1, sy = o.sy ?? o.s ?? 1;
+  e.style.transform = `translate(${(o.x || 0).toFixed(2)}px,${(o.y || 0).toFixed(2)}px) rotate(${(o.r || 0).toFixed(2)}deg) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
+  const b = o.blur || 0;
+  e.style.filter = [b > 0.05 ? `blur(${b.toFixed(2)}px)` : '', o.filter || '', e.dataset.f || ''].join(' ').trim() || 'none';
+}
+// SVG: atributos
+function sa(e, attrs) { for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+function svgEl(tag, attrs, parent) { const e = document.createElementNS(NS, tag); sa(e, attrs); if (parent) parent.appendChild(e); return e; }
+
+// revelação "tinta se espalhando": progresso p (0 → nada, 1 → tudo)
+function ink(layer, fid, p) {
+  if (p >= 1) { layer.style.filter = 'none'; layer.style.display = ''; return; }
+  if (p <= 0) { layer.style.display = 'none'; return; }
+  layer.style.display = '';
+  const k = 12, q = lerp(-0.12, 1.12, p);
+  $(fid + 'f').setAttribute('intercept', (k * q).toFixed(3));
+  $(fid + 'f').setAttribute('slope', (-k).toFixed(3));
+  layer.style.filter = `url(#${fid})`;
+}
+
+// entrada de palavra (blur → nítido), estilo das outras peças
+function wordIn(t, t0, o = {}) {
+  const dur = o.dur ?? .7;
+  const p = seg(t, t0, t0 + dur);
+  return {
+    op: E.outCubic(seg(t, t0, t0 + dur * .55)),
+    y: (o.dy ?? 26) * (1 - E.outCubic(p)),
+    s: lerp(o.s0 ?? 1.06, 1, E.outCubic(p)),
+    blur: (o.blur ?? 12) * (1 - E.outCubic(seg(t, t0, t0 + dur * .8))),
+  };
+}
+function words(parent, text, cls, style) {
+  const gold = /\bgold\b/.test(cls);
+  const box = el('div', cls.replace(/\bgold\b/, ''), parent);
+  if (style) box.style.cssText = style;
+  const ws = text.split(' ').map((w, i, a) => {
+    const s = el('span', 'w' + (gold ? ' gold' : ''), box, w);
+    if (i < a.length - 1) box.appendChild(document.createTextNode(' '));
+    return s;
+  });
+  return { box, ws };
+}
+
+/* =====================================================================
+   CRONOGRAMA — cortes na grade da trilha (88 BPM)
+   VO: janelas previstas das 6 frases da locução (ajustadas à locução real
+   quando ela for gerada; ver tools/align_vo.py)
+   ===================================================================== */
+const VO = window.VO_TIMES || [[1.0, 5.6], [6.4, 10.6], [11.3, 14.6], [15.3, 18.6], [19.4, 22.6], [23.6, 25.6]];
+// cada cena começa ~0,3 s antes da sua frase, encaixada na batida mais próxima da trilha
+const onBeat = s => Math.round(s / BEAT) * BEAT;
+const T = {
+  s2: onBeat(VO[1][0] - .3), s3: onBeat(VO[2][0] - .3), s4: onBeat(VO[3][0] - .3),
+  s5: onBeat(VO[4][0] - .3), s6: onBeat(VO[5][0] - .3),
+};
+T.inkDur = 0.75;
+
+/* =====================================================================
+   CENA 1 — amanhecer na roça (Mococa · SP)
+   ===================================================================== */
+const s1 = $('s1');
+const sky = el('div', 'layer', s1);
+const stars = el('div', 'layer', s1);
+for (let i = 0; i < 40; i++) {
+  const st = el('div', 'abs', stars);
+  const r = 1 + rand(i * 3.3) * 2.2;
+  st.style.cssText = `left:${rand(i) * 1080}px;top:${rand(i * 7.1) * 700}px;width:${r}px;height:${r}px;border-radius:50%;background:#FFF4D6;opacity:${.3 + rand(i * 2.2) * .6}`;
+}
+const sunWrap = el('div', 'abs', s1);
+sunWrap.innerHTML = `<svg width="1080" height="1080" viewBox="-540 -540 1080 1080">
+  <defs><radialGradient id="sunG"><stop offset="0" stop-color="#FFF7DA"/><stop offset=".22" stop-color="#FCE1A0"/>
+  <stop offset=".3" stop-color="#F2B54E" stop-opacity=".95"/><stop offset=".55" stop-color="#E58A3A" stop-opacity=".25"/><stop offset="1" stop-color="#E58A3A" stop-opacity="0"/></radialGradient></defs>
+  <g id="rays"></g><circle r="540" fill="url(#sunG)"/></svg>`;
+const rays = sunWrap.querySelector('#rays');
+for (let i = 0; i < 36; i++) {
+  const a = i / 36 * Math.PI * 2, a2 = a + 0.035;
+  const r0 = 150, r1 = i % 2 ? 470 : 540;
+  svgEl('path', { d: `M${r0 * Math.cos(a)} ${r0 * Math.sin(a)}L${r1 * Math.cos(a)} ${r1 * Math.sin(a)}L${r1 * Math.cos(a2)} ${r1 * Math.sin(a2)}Z`, fill: '#F7D58B', opacity: .22 }, rays);
+}
+// morros em camadas com hachura de gravura
+function hillD(baseY, amp, seed, fr = 1) {
+  let d = `M-20 1920L-20 ${baseY}`;
+  for (let x = -20; x <= 1100; x += 20) {
+    const y = baseY - amp * (0.55 * Math.sin(x / 260 * fr + seed) + 0.3 * Math.sin(x / 120 * fr + seed * 2.3) + 0.15 * Math.sin(x / 55 + seed * 4.1));
+    d += `L${x} ${y.toFixed(1)}`;
+  }
+  return d + 'L1100 1920Z';
+}
+function hillY(x, baseY, amp, seed, fr = 1) {
+  return baseY - amp * (0.55 * Math.sin(x / 260 * fr + seed) + 0.3 * Math.sin(x / 120 * fr + seed * 2.3) + 0.15 * Math.sin(x / 55 + seed * 4.1));
+}
+const HILLS = [
+  { base: 1150, amp: 90, seed: 1.3, fill: '#7A5143', hatch: .25 },
+  { base: 1270, amp: 70, seed: 4.2, fill: '#4F3426', hatch: .45 },
+  { base: 1420, amp: 60, seed: 2.2, fill: '#2C1D13', hatch: .6, rows: true },
+  { base: 1620, amp: 55, seed: 5.7, fill: '#160F09', hatch: .8, rows: true },
+];
+const hillLayers = HILLS.map((h, i) => {
+  const g = el('div', 'layer', s1);
+  let inner = `<path d="${hillD(h.base, h.amp, h.seed)}" fill="${h.fill}"/>
+    <path d="${hillD(h.base, h.amp, h.seed)}" fill="url(#hatch)" opacity="${h.hatch}"/>`;
+  // fileiras de café: pés como bolinhas ao longo das curvas de nível
+  if (h.rows) {
+    for (let r = 0; r < 7; r++) {
+      for (let x = -10; x < 1100; x += 24 + r * 3) {
+        const y = hillY(x, h.base, h.amp, h.seed) + 26 + r * (34 + r * 6);
+        const rr = 9 + r * 1.6;
+        inner += `<circle cx="${x + (r % 2) * 12}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="${i === 2 ? '#3B3A1C' : '#20200E'}"/>` +
+          `<circle cx="${x + (r % 2) * 12 - rr * .3}" cy="${(y - rr * .35).toFixed(1)}" r="${(rr * .45).toFixed(1)}" fill="${i === 2 ? '#5C5A2A' : '#34331A'}" opacity=".8"/>`;
+      }
+    }
+  }
+  // casa da fazenda no morro do meio, janela acesa
+  if (i === 1) {
+    const hx = 780, hy = hillY(780, h.base, h.amp, h.seed) - 6;
+    inner += `<g transform="translate(${hx},${hy})">
+      <rect x="-60" y="-58" width="120" height="58" fill="#2A1A10"/>
+      <path d="M-74 -56L0 -98L74 -56Z" fill="#3A2416"/>
+      <rect x="-40" y="-40" width="18" height="18" fill="#F6C46A" id="win1"/>
+      <rect x="22" y="-40" width="18" height="18" fill="#F6C46A" id="win2"/>
+      <rect x="-8" y="-34" width="16" height="34" fill="#140C07"/></g>`;
+  }
+  g.innerHTML = `<svg width="1080" height="1920">${inner}</svg>`;
+  return g;
+});
+const mist = [0, 1, 2].map(i => {
+  const m = el('div', 'abs', s1);
+  m.style.cssText = `width:1400px;height:150px;border-radius:50%;background:radial-gradient(ellipse at center, rgba(255,226,190,.35), rgba(255,226,190,0) 70%);filter:blur(10px)`;
+  return m;
+});
+const birds = [0, 1, 2, 3, 4].map(i => {
+  const b = el('div', 'abs', s1, `<svg width="60" height="30" viewBox="-30 -15 60 30"><path d="M-26 0 Q-13 -12 0 0 Q13 -12 26 0" fill="none" stroke="#1A120B" stroke-width="3.2" stroke-linecap="round"/></svg>`);
+  return b;
+});
+// texto
+const s1Orn = el('div', 'abs', s1, `<img src="assets/logo_ornament.png" width="170" style="display:block">`);
+const s1Title = el('div', 'abs center cinzel gold', s1, 'Mococa · SP');
+s1Title.style.cssText += ';font-size:76px;letter-spacing:14px;top:470px';
+const s1Rules = el('div', 'abs', s1, `<svg width="1080" height="20"><path d="M140 10H380M700 10H940" stroke="url(#goldH)" stroke-width="2.5"/><circle cx="380" cy="10" r="4" fill="${GOLD}"/><circle cx="700" cy="10" r="4" fill="${GOLD}"/></svg>`);
+const s1Line = words(s1, 'o dia começa cedo na roça', 'abs center fell', 'font-size:76px;top:600px');
+
+/* =====================================================================
+   CENA 2 — tradição de geração em geração (cena do logo)
+   ===================================================================== */
+const s2 = $('s2');
+const FR = { x: 70, y: 470, w: 940, h: 640 };
+const s2Light = el('div', 'layer', s2);
+s2Light.style.cssText = 'background:radial-gradient(ellipse 60% 40% at 50% 42%, rgba(255,200,120,.16), rgba(0,0,0,0) 70%)';
+const s2Frame = el('div', 'abs', s2);
+box(s2Frame, FR.x, FR.y, FR.w, FR.h);
+s2Frame.style.cssText += ';overflow:hidden;border-radius:26px';
+const s2Img = el('img', 'abs', s2Frame);
+s2Img.src = 'assets/logo_scene.png';
+const SC = { w: 1050, h: 442 };
+const s2Scale = FR.h / SC.h * 1.04;
+s2Img.style.width = (SC.w * s2Scale) + 'px';
+s2Img.style.height = (SC.h * s2Scale) + 'px';
+s2Img.style.filter = 'sepia(.25) contrast(1.05) brightness(.95)';
+const s2Border = el('div', 'abs', s2, frameSVG(FR.w + 40, FR.h + 40, 34));
+box(s2Border, FR.x - 20, FR.y - 20, FR.w + 40, FR.h + 40);
+const s2Orn = el('div', 'abs', s2, `<img src="assets/logo_ornament.png" width="200" style="display:block">`);
+const s2a = words(s2, 'cuidado com carinho,', 'abs center fell', 'font-size:80px;top:1185px');
+const s2b = words(s2, 'de geração em geração', 'abs center cinzel gold', 'font-size:70px;letter-spacing:3px;top:1300px');
+const motes = Array.from({ length: 26 }, (_, i) => {
+  const m = el('div', 'abs', s2);
+  const r = 2 + rand(i * 5.1) * 4;
+  m.style.cssText = `width:${r}px;height:${r}px;border-radius:50%;background:#FFE7B0;box-shadow:0 0 8px #FFD68A`;
+  return m;
+});
+
+function box(e, x, y, w, h) { e.style.left = x + 'px'; e.style.top = y + 'px'; e.style.width = w + 'px'; e.style.height = h + 'px'; }
+
+// moldura dourada com cantos em arabesco (traço que "desenha")
+function frameSVG(w, h, r) {
+  const c = (x, y, sx, sy) => `<g transform="translate(${x},${y}) scale(${sx},${sy})">
+      <path class="drawp" d="M0 90 C0 35 35 0 90 0" stroke="url(#goldG)" stroke-width="5" fill="none"/>
+      <path class="drawp" d="M18 120 C18 55 55 18 120 18" stroke="url(#goldG)" stroke-width="2.5" fill="none"/>
+      <path class="drawp" d="M40 70 C40 50 52 40 66 40 C80 40 86 50 86 58 C86 66 80 71 73 71 C67 71 63 67 63 62" stroke="url(#goldG)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M96 4 C112 -6 128 2 132 14 C120 10 108 12 96 4Z" fill="${GOLD}"/>
+      <path d="M4 96 C-6 112 2 128 14 132 C10 120 12 108 4 96Z" fill="${GOLD}"/></g>`;
+  return `<svg width="${w}" height="${h}">
+    <rect class="drawp" x="6" y="6" width="${w - 12}" height="${h - 12}" rx="${r}" fill="none" stroke="url(#goldG)" stroke-width="4"/>
+    <rect class="drawp" x="18" y="18" width="${w - 36}" height="${h - 36}" rx="${r - 10}" fill="none" stroke="${GOLD}" stroke-opacity=".55" stroke-width="1.5"/>
+    ${c(-8, -8, 1, 1)}${c(w + 8, -8, -1, 1)}${c(-8, h + 8, 1, -1)}${c(w + 8, h + 8, -1, -1)}</svg>`;
+}
+
+/* =====================================================================
+   CENA 3 — 100% arábica · variedade Arara (galho de café)
+   ===================================================================== */
+const s3 = $('s3');
+const s3Light = el('div', 'layer', s3);
+s3Light.style.cssText = 'background:radial-gradient(ellipse 70% 45% at 50% 35%, rgba(255,190,110,.18), rgba(0,0,0,0) 70%)';
+const s3Pct = el('div', 'abs center rye gold', s3, '100%');
+s3Pct.style.cssText += ';font-size:300px;line-height:1;top:330px';
+const s3Arab = words(s3, 'ARÁBICA', 'abs center rye gold', 'font-size:150px;letter-spacing:6px;top:640px');
+// faixa (fita) "Variedade Arara"
+const s3Rib = el('div', 'abs', s3, `<svg width="760" height="150" viewBox="0 0 760 150">
+  <path d="M60 30 L0 30 L30 75 L0 120 L90 120 Z" fill="#8C6A2C"/>
+  <path d="M700 30 L760 30 L730 75 L760 120 L670 120 Z" fill="#8C6A2C"/>
+  <path d="M60 16 Q380 -10 700 16 L700 104 Q380 78 60 104 Z" fill="url(#goldG)" stroke="#5A4018" stroke-width="3"/>
+  <path d="M60 16 Q380 -10 700 16 L700 104 Q380 78 60 104 Z" fill="url(#hatchLight)"/>
+  <text x="380" y="78" text-anchor="middle" font-family="Fell" font-style="italic" font-size="58" fill="#2B1A0C">Variedade Arara</text></svg>`);
+s3Rib.style.left = '160px'; s3Rib.style.top = '840px';
+// galho: caule + folhas + cerejas
+const s3Branch = el('div', 'layer', s3);
+const BR = { stem: 'M-60 1720 C 180 1600, 380 1470, 560 1380 S 900 1180, 1150 1150' };
+let brSvg = `<svg width="1080" height="1920"><path id="stem" d="${BR.stem}" fill="none" stroke="#3B2414" stroke-width="16" stroke-linecap="round"/>
+  <path id="stemHi" d="${BR.stem}" fill="none" stroke="#7A5233" stroke-width="5" stroke-linecap="round" transform="translate(-3,-4)"/><g id="leaves"></g><g id="cherries"></g></svg>`;
+s3Branch.innerHTML = brSvg;
+const stem = s3Branch.querySelector('#stem'), stemHi = s3Branch.querySelector('#stemHi');
+const STEM_LEN = stem.getTotalLength();
+[stem, stemHi].forEach(p => { p.style.strokeDasharray = STEM_LEN; });
+const leafD = (L, w) => `M0 0 C${L * .25} ${-w} ${L * .7} ${-w * .9} ${L} 0 C${L * .7} ${w * .9} ${L * .25} ${w} 0 0Z`;
+const LEAVES = [];
+const CHERRIES = [];
+[0.12, 0.24, 0.36, 0.5, 0.62, 0.75, 0.87].forEach((u, i) => {
+  const pt = stem.getPointAtLength(u * STEM_LEN), pt2 = stem.getPointAtLength(Math.min(STEM_LEN, u * STEM_LEN + 4));
+  const ang = Math.atan2(pt2.y - pt.y, pt2.x - pt.x) * 180 / Math.PI;
+  [-1, 1].forEach(side => {
+    const L = 170 + rand(i * 9 + side) * 70, wd = 48 + rand(i * 3 + side) * 12;
+    const g = svgEl('g', {}, s3Branch.querySelector('#leaves'));
+    const inner = svgEl('g', {}, g);
+    svgEl('path', { d: leafD(L, wd), fill: 'url(#leafG)', stroke: '#1C2A0C', 'stroke-width': 3 }, inner);
+    svgEl('path', { d: `M4 0 L${L - 10} 0`, stroke: '#C7D58A', 'stroke-opacity': .55, 'stroke-width': 2.5, fill: 'none' }, inner);
+    for (let k = 1; k <= 5; k++) {
+      const x = L * k / 6.5;
+      svgEl('path', { d: `M${x} 0 Q${x + 18} ${-wd * .45} ${x + 34} ${-wd * .7} M${x} 0 Q${x + 18} ${wd * .45} ${x + 34} ${wd * .7}`, stroke: '#C7D58A', 'stroke-opacity': .28, 'stroke-width': 1.6, fill: 'none' }, inner);
+    }
+    svgEl('path', { d: leafD(L, wd), fill: 'url(#hatch)', opacity: .35 }, inner);
+    LEAVES.push({ g, x: pt.x, y: pt.y, a: ang + side * (48 + rand(i * 4 + side) * 18), u, side });
+  });
+  // cachos de cerejas nos nós
+  const n = 5 + Math.floor(rand(i * 13) * 3);
+  for (let k = 0; k < n; k++) {
+    const a = (k / n) * Math.PI * 2 + i;
+    const rr = 18 + rand(i * 31 + k) * 6;
+    const cx = pt.x + Math.cos(a) * 26 + (rand(k + i * 7) - .5) * 10, cy = pt.y + Math.sin(a) * 20 + 14;
+    const g = svgEl('g', {}, s3Branch.querySelector('#cherries'));
+    const inner = svgEl('g', {}, g);
+    const ripe = rand(i * 17 + k) > .18;
+    svgEl('circle', { r: rr, fill: ripe ? 'url(#cherryG)' : '#9B9A33', stroke: '#3A0A06', 'stroke-width': 2 }, inner);
+    svgEl('ellipse', { cx: -rr * .35, cy: -rr * .38, rx: rr * .28, ry: rr * .18, fill: '#FFE3D0', opacity: .7 }, inner);
+    svgEl('circle', { cx: rr * .45, cy: rr * .5, r: 3.2, fill: '#2A0805' }, inner);
+    CHERRIES.push({ g, x: cx, y: cy, u, k });
+  }
+});
+CHERRIES.sort((a, b) => a.u - b.u || a.k - b.k);
+
+/* =====================================================================
+   CENA 4 — da fazenda direto pra sua xícara
+   ===================================================================== */
+const s4 = $('s4');
+const s4Light = el('div', 'layer', s4);
+s4Light.style.cssText = 'background:radial-gradient(ellipse 70% 40% at 50% 62%, rgba(255,190,110,.16), rgba(0,0,0,0) 70%)';
+const s4Txt1 = words(s4, 'Da nossa fazenda…', 'abs fell', 'font-size:78px;left:450px;top:430px;width:600px');
+const s4House = el('div', 'abs', s4, `<svg width="360" height="300" viewBox="0 0 360 300">
+  <g fill="#1E140C" stroke="${CREAM}" stroke-width="4" stroke-linejoin="round">
+    <path class="drawp" d="M40 150 L180 60 L320 150"/>
+    <path class="drawp" d="M60 140 L60 260 L300 260 L300 140"/>
+    <path class="drawp" d="M80 260 L80 175 L280 175 L280 260" fill="none"/>
+    <path class="drawp" d="M240 105 L240 70 L262 70 L262 118" />
+    <rect class="drawp" x="160" y="195" width="40" height="65"/>
+    <rect class="drawp" x="100" y="195" width="34" height="30" fill="#F2C46B"/>
+    <rect class="drawp" x="226" y="195" width="34" height="30" fill="#F2C46B"/>
+  </g>
+  <path d="M60 150 L180 70 L300 150Z" fill="url(#hatch)" opacity=".6"/>
+  <g fill="#3B3A1C">${Array.from({ length: 9 }, (_, i) => `<circle cx="${10 + i * 42}" cy="${272 + (i % 2) * 8}" r="${16 + (i % 3) * 3}"/>`).join('')}</g></svg>`);
+s4House.style.left = '90px'; s4House.style.top = '330px';
+const s4Path = el('div', 'layer', s4, `<svg width="1080" height="1920">
+  <path id="route" d="M250 650 C 250 740, 700 740, 760 840 S 380 930, 430 1000 S 560 1030, 540 1060" fill="none" stroke="${GOLD}" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 22"/>
+  <g id="pathBeans"></g></svg>`);
+const route = s4Path.querySelector('#route');
+const ROUTE_LEN = route.getTotalLength();
+const routeMask = route.cloneNode();
+const beanD = 'M0 -17 C14 -17 22 -8 22 0 C22 9 14 17 0 17 C-14 17 -22 9 -22 0 C-22 -8 -14 -17 0 -17Z';
+const beanCrease = 'M0 -15 C-7 -6 7 6 0 15';
+function beanSVG(s = 1) { return `<g transform="scale(${s})"><path d="${beanD}" fill="url(#beanG)" stroke="#1E1209" stroke-width="2"/><path d="${beanCrease}" stroke="#1A0F07" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="-8" cy="-7" rx="6" ry="3.5" fill="#D8A777" opacity=".35"/></g>`; }
+const pathBeans = [0, 1, 2].map(i => { const g = svgEl('g', {}, s4Path.querySelector('#pathBeans')); g.innerHTML = beanSVG(1.15); return g; });
+// xícara com pires
+const CUP = { x: 540, y: 1180 };
+const s4Cup = el('div', 'abs', s4, `<svg width="520" height="360" viewBox="-260 -200 520 360">
+  <ellipse cx="0" cy="118" rx="245" ry="46" fill="#0A0705" opacity=".55"/>
+  <ellipse cx="0" cy="100" rx="235" ry="52" fill="#E9DEC6" stroke="${GOLD}" stroke-width="4"/>
+  <ellipse cx="0" cy="96" rx="150" ry="28" fill="#D2C3A3"/>
+  <path d="M-160 -80 C-160 40 -95 100 0 100 C95 100 160 40 160 -80 Z" fill="#F1E7D1" stroke="#8C6A2C" stroke-width="3"/>
+  <path d="M-160 -80 C-160 40 -95 100 0 100 C95 100 160 40 160 -80 Z" fill="url(#hatch)" opacity=".18"/>
+  <path d="M150 -40 C230 -50 230 50 130 40" fill="none" stroke="#F1E7D1" stroke-width="18" stroke-linecap="round"/>
+  <path d="M150 -40 C230 -50 230 50 130 40" fill="none" stroke="#8C6A2C" stroke-width="3"/>
+  <path d="M-150 -55 C-150 -50 150 -50 150 -55" stroke="${GOLD}" stroke-width="5" fill="none"/>
+  <ellipse cx="0" cy="-80" rx="160" ry="30" fill="#F7EEDC" stroke="${GOLD}" stroke-width="4"/>
+  <ellipse id="coffee" cx="0" cy="-78" rx="146" ry="24" fill="#3A2010"/>
+  <ellipse id="crema" cx="-10" cy="-80" rx="110" ry="15" fill="none" stroke="#B57A45" stroke-width="5" opacity=".7"/></svg>`);
+s4Cup.style.left = (CUP.x - 260) + 'px'; s4Cup.style.top = (CUP.y - 200) + 'px';
+const steam = [0, 1, 2].map(i => el('div', 'abs', s4, `<svg width="200" height="420" viewBox="-100 -420 200 420"><path d="" fill="none" stroke="#FFF3DD" stroke-width="${10 - i * 2}" stroke-linecap="round" opacity=".55"/></svg>`));
+const s4Txt2 = words(s4, 'direto pra sua xícara', 'abs center cinzel gold', 'font-size:70px;letter-spacing:2px;top:1400px');
+
+/* =====================================================================
+   CENA 5 — o produto
+   ===================================================================== */
+const s5 = $('s5');
+const s5Light = el('div', 'layer', s5);
+s5Light.style.cssText = 'background:radial-gradient(ellipse 55% 42% at 50% 46%, rgba(255,196,120,.26), rgba(0,0,0,0) 72%)';
+const s5Title = words(s5, 'Café Santa Luzia', 'abs center rye gold', 'font-size:104px;letter-spacing:2px;top:300px');
+// ramos desfocados nas laterais (profundidade)
+const s5Sprigs = [-1, 1].map(side => {
+  const d = el('div', 'abs', s5);
+  let inner = '';
+  for (let k = 0; k < 6; k++) {
+    const x = 60 + rand(k * 3 + side) * 120, y = 560 + k * 150 + rand(k + side) * 60;
+    inner += `<g transform="translate(${x},${y}) rotate(${(rand(k * 5) - .5) * 80 + (side > 0 ? 180 : 0)})"><path d="${leafD(150, 42)}" fill="url(#leafG)"/></g>`;
+    for (let c = 0; c < 4; c++) inner += `<circle cx="${x + (rand(k * 9 + c) - .5) * 70}" cy="${y + 40 + (rand(k * 11 + c) - .5) * 50}" r="${20 + rand(c + k) * 8}" fill="url(#cherryG)"/>`;
+  }
+  d.innerHTML = `<svg width="300" height="1920">${inner}</svg>`;
+  d.style.left = side < 0 ? '-80px' : '860px';
+  return d;
+});
+// pacote stand-up preto fosco com rótulo redondo
+const PK = { x: 290, y: 560, w: 500, h: 800 };
+const s5Pack = el('div', 'abs', s5, `<svg width="${PK.w}" height="${PK.h}" viewBox="0 0 500 800">
+  <defs>
+    <linearGradient id="packG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0B0B0B"/><stop offset=".18" stop-color="#2A2A2A"/>
+      <stop offset=".45" stop-color="#1A1A1A"/><stop offset=".8" stop-color="#121212"/><stop offset="1" stop-color="#050505"/></linearGradient>
+    <linearGradient id="crimpG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E1E1E"/><stop offset="1" stop-color="#0C0C0C"/></linearGradient>
+    <clipPath id="packClip"><path d="M18 40 Q250 30 482 40 L470 760 Q470 790 440 792 L60 792 Q30 790 30 760 Z"/></clipPath>
+    <clipPath id="labelClip"><circle cx="250" cy="520" r="190"/></clipPath>
+    <linearGradient id="shineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#FFE9B8" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <ellipse cx="250" cy="796" rx="250" ry="22" fill="#000" opacity=".6"/>
+  <path d="M18 40 Q250 30 482 40 L470 760 Q470 790 440 792 L60 792 Q30 790 30 760 Z" fill="url(#packG)"/>
+  <rect x="18" y="0" width="464" height="60" rx="6" fill="url(#crimpG)"/>
+  <g stroke="#333" stroke-width="2">${Array.from({ length: 46 }, (_, i) => `<line x1="${24 + i * 10}" y1="6" x2="${24 + i * 10}" y2="54"/>`).join('')}</g>
+  <g clip-path="url(#packClip)" opacity=".5">
+    <path d="M70 120 C120 260 90 420 140 600" stroke="#3a3a3a" stroke-width="22" fill="none" opacity=".35" style="filter:blur(6px)"/>
+    <path d="M330 90 C300 200 380 330 340 470" stroke="#3a3a3a" stroke-width="18" fill="none" opacity=".3"/>
+  </g>
+  <circle cx="250" cy="520" r="196" fill="#0d0a07" stroke="url(#goldG)" stroke-width="5"/>
+  <image href="assets/logo_src.jpg" x="54" y="333" width="392" height="374" clip-path="url(#labelClip)" preserveAspectRatio="xMidYMid slice"/>
+  <g clip-path="url(#packClip)"><rect id="shine" x="-300" y="-50" width="200" height="900" fill="url(#shineG)" transform="rotate(14)"/></g></svg>`);
+s5Pack.style.left = PK.x + 'px'; s5Pack.style.top = PK.y + 'px';
+const s5Beans = Array.from({ length: 16 }, (_, i) => {
+  const b = el('div', 'abs', s5, `<svg width="60" height="60" viewBox="-30 -30 60 60">${beanSVG(1.05)}</svg>`);
+  return b;
+});
+const s5Rib = el('div', 'abs', s5, `<img src="assets/logo_ribbon.png" width="760" style="display:block">`);
+s5Rib.style.left = '160px'; s5Rib.style.top = '1430px';
+
+/* =====================================================================
+   CENA 6 — assinatura + chamada (WhatsApp)
+   ===================================================================== */
+const s6 = $('s6');
+const s6Light = el('div', 'layer', s6);
+s6Light.style.cssText = 'background:radial-gradient(ellipse 60% 40% at 50% 40%, rgba(255,196,120,.22), rgba(0,0,0,0) 72%)';
+const s6Corners = el('div', 'abs', s6, frameSVG(980, 1500, 30));
+box(s6Corners, 50, 150, 980, 1500);
+const s6Logo = el('div', 'abs', s6, `<img src="assets/logo.png" width="860" style="display:block">`);
+s6Logo.style.left = '110px'; s6Logo.style.top = '300px';
+const s6Div = el('div', 'abs', s6, `<svg width="1080" height="40"><path d="M200 20H470M610 20H880" stroke="url(#goldH)" stroke-width="3"/><g transform="translate(540,20)">${beanSVG(.9)}</g></svg>`);
+s6Div.style.top = '1160px';
+const s6Cta = el('div', 'abs center', s6, `<div style="display:inline-flex;align-items:center;gap:22px">
+  <svg width="64" height="64" viewBox="-2 -2 28 28"><circle cx="12" cy="12" r="12.5" fill="none" stroke="${GOLD}" stroke-width="1.6"/>
+  <path transform="translate(5.2,5.2) scale(.57)" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" fill="${GOLD}"/></svg>
+  <span class="cinzel gold" style="font-size:58px;letter-spacing:3px">Peça pelo WhatsApp</span></div>`);
+s6Cta.style.top = '1225px';
+const s6Handle = el('div', 'abs center fell', s6, '@cafe.santa.luzia');
+s6Handle.style.cssText += ';font-size:60px;top:1335px';
+const s6Foot = el('div', 'abs center cinzel', s6, '100% Arábica · Mococa – SP');
+s6Foot.style.cssText += ';font-size:32px;letter-spacing:8px;color:#C9A24E;top:1430px;font-weight:600';
+
+// sombra do dourado guardada para o set() não apagá-la
+const GOLD_SHADOW = 'drop-shadow(0 3px 0 rgba(40,24,8,.9)) drop-shadow(0 10px 22px rgba(0,0,0,.55))';
+document.querySelectorAll('.gold').forEach(e => { e.dataset.f = GOLD_SHADOW; });
+
+// traços que "se desenham"
+const drawPaths = new Map();
+function prepDraw(root) {
+  root.querySelectorAll('.drawp').forEach(p => {
+    const L = (p.getTotalLength ? p.getTotalLength() : 1000) + 2;
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+    drawPaths.set(p, L);
+  });
+}
+[s2Border, s4House, s6Corners].forEach(prepDraw);
+function drawIn(root, p) {
+  root.querySelectorAll('.drawp').forEach(q => { const L = drawPaths.get(q); q.style.strokeDashoffset = (L * (1 - p)).toFixed(1); });
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+const dust = $('dust').getContext('2d');
+function render(t) {
+  const fr = Math.round(t * 30);
+  // ---------- transições (tinta) ----------
+  ink(s2, 'ink1', seg(t, T.s2 - .3, T.s2 - .3 + T.inkDur));
+  ink(s3, 'ink3', seg(t, T.s3 - .3, T.s3 - .3 + T.inkDur));
+  ink(s4, 'ink1', seg(t, T.s4 - .3, T.s4 - .3 + T.inkDur));
+  ink(s5, 'ink2', seg(t, T.s5 - .3, T.s5 - .3 + T.inkDur));
+  ink(s6, 'ink2', seg(t, T.s6 - .3, T.s6 - .3 + T.inkDur));
+  // esconde cenas totalmente cobertas (desempenho)
+  s1.style.display = t < T.s2 + .6 ? '' : 'none';
+  [[s2, T.s3], [s3, T.s4], [s4, T.s5], [s5, T.s6]].forEach(([s, nx]) => { if (t > nx + .6) s.style.display = 'none'; });
+
+  // ================= CENA 1 =================
+  if (t < T.s2 + .6) {
+    const p = seg(t, 0, 6.5);
+    const c = (a, b) => { // cor do céu clareando
+      const A = a.match(/\w\w/g).map(h => parseInt(h, 16)), B = b.match(/\w\w/g).map(h => parseInt(h, 16));
+      return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], E.inOutSine(p)))).join(',')})`;
+    };
+    sky.style.background = `linear-gradient(180deg, ${c('0f0b18', '2a1c2a')} 0%, ${c('2a1a2a', '6b3a35')} 30%, ${c('5a2e2a', 'c8703a')} 52%, ${c('a65a34', 'f0b062')} 64%, ${c('c98a4c', 'ffd9a0')} 72%)`;
+    stars.style.opacity = (1 - E.outCubic(seg(t, 0, 3))).toFixed(3);
+    const sunY = lerp(1260, 980, E.outCubic(seg(t, 0, 7)));
+    set(sunWrap, { x: 0, y: sunY - 540, op: E.outCubic(seg(t, 0, 1.2)), s: 1 + .03 * Math.sin(t * 1.3) });
+    rays.setAttribute('transform', `rotate(${(t * 3).toFixed(2)})`);
+    const cam = E.inOutSine(seg(t, 0, 6.5));
+    hillLayers.forEach((g, i) => set(g, { y: (60 - i * 8) * (1 - cam) - 30 * cam * (i / 3), s: 1 + .02 * cam * (i + 1) }));
+    mist.forEach((m, i) => set(m, { x: -160 + ((t * (14 + i * 6) + i * 300) % 600) - 200, y: 1130 + i * 120, op: .9 - i * .15 }));
+    birds.forEach((b, i) => {
+      const bt = t - .6 - i * .35;
+      const x = -80 + bt * (150 + i * 18), y = 860 + i * 40 - bt * 18 + Math.sin(bt * 2 + i) * 14;
+      set(b, { x, y, op: bt > 0 ? 1 : 0, sy: .55 + .45 * Math.abs(Math.sin(bt * (9 + i))), s: .9 + i * .08 });
+    });
+    const tt = seg(t, VO[0][0] - .1, VO[0][0] + .9);
+    set(s1Orn, { x: 455, y: 360, op: E.outCubic(seg(t, VO[0][0] - .3, VO[0][0] + .4)), s: lerp(.85, 1, E.outCubic(seg(t, VO[0][0] - .3, VO[0][0] + .5))) });
+    set(s1Title, { op: E.outCubic(tt), blur: 14 * (1 - E.outCubic(tt)), y: 16 * (1 - E.outCubic(tt)) });
+    s1Title.style.letterSpacing = lerp(40, 14, E.outCubic(tt)).toFixed(1) + 'px';
+    set(s1Rules, { y: 520, op: E.outCubic(seg(t, VO[0][0] + .3, VO[0][0] + 1)), sx: E.outCubic(seg(t, VO[0][0] + .2, VO[0][0] + 1.1)) });
+    const l0 = VO[0][0] + 2.0;
+    s1Line.ws.forEach((w, i) => set(w, wordIn(t, l0 + i * .2)));
+  }
+
+  // ================= CENA 2 =================
+  if (t >= T.s2 - .4 && t < T.s3 + .6) {
+    const lt = t - T.s2;
+    const pan = E.inOutSine(seg(t, T.s2 - .3, T.s3 + .3));
+    const imgW = SC.w * s2Scale;
+    // da direita (o mais velho) para a esquerda (o mais novo): a tradição passa adiante
+    set(s2Img, { x: lerp(FR.w - imgW, 0, pan), y: -10 + 8 * Math.sin(lt * .8), s: lerp(1.08, 1.0, pan) });
+    s2Img.style.transformOrigin = '50% 50%';
+    drawIn(s2Border, E.inOutCubic(seg(t, T.s2, T.s2 + 1.1)));
+    set(s2Orn, { x: 440, y: 385, op: E.outCubic(seg(t, T.s2 + .6, T.s2 + 1.1)), s: lerp(.6, 1, E.outBack(seg(t, T.s2 + .6, T.s2 + 1.1), 2)) });
+    s2a.ws.forEach((w, i) => set(w, wordIn(t, VO[1][0] + 1.0 + i * .2)));
+    s2b.ws.forEach((w, i) => set(w, wordIn(t, VO[1][0] + 2.3 + i * .18, { dy: 20 })));
+    motes.forEach((m, i) => {
+      const ph = rand(i * 3.7) * 10;
+      const x = 120 + rand(i) * 840 + 30 * Math.sin(t * .4 + ph), y = 1150 - ((t * (10 + rand(i * 2) * 18) + ph * 80) % 800);
+      set(m, { x, y, op: (.35 + .45 * Math.sin(t * 1.5 + ph) ** 2) * seg(t, T.s2, T.s2 + 1) });
+    });
+  }
+
+  // ================= CENA 3 =================
+  if (t >= T.s3 - .4 && t < T.s4 + .6) {
+    const t0 = VO[2][0];
+    const ps = seg(t, t0 - .05, t0 + .35);
+    set(s3Pct, { op: E.outCubic(seg(t, t0 - .05, t0 + .1)), s: lerp(1.7, 1, E.outCubic(ps)) * (1 + .03 * Math.sin(Math.PI * seg(t, t0 + .3, t0 + .5))), blur: 10 * (1 - ps) });
+    s3Arab.ws.forEach((w, i) => set(w, wordIn(t, t0 + .65, { dy: 30, s0: 1.15 })));
+    const rp = E.outCubic(seg(t, VO[2][0] + 1.9, VO[2][0] + 2.5));
+    set(s3Rib, { op: E.outCubic(seg(t, VO[2][0] + 1.9, VO[2][0] + 2.05)), sx: lerp(.05, 1, rp), sy: lerp(.6, 1, rp) });
+    // galho
+    const bp = E.inOutCubic(seg(t, T.s3, T.s3 + 1.4));
+    [stem, stemHi].forEach(p => { p.style.strokeDashoffset = (STEM_LEN * (1 - bp)).toFixed(1); });
+    LEAVES.forEach((L, i) => {
+      const lt0 = T.s3 + .2 + L.u * 1.3 + (L.side > 0 ? .08 : 0);
+      const lp = E.outBack(seg(t, lt0, lt0 + .5), 1.6);
+      L.g.setAttribute('transform', `translate(${L.x},${L.y}) rotate(${(L.a + 6 * Math.sin(t * 1.2 + i)).toFixed(2)}) scale(${Math.max(lp, .001).toFixed(3)})`);
+    });
+    CHERRIES.forEach((c, i) => {
+      const ct0 = T.s3 + .9 + i * (2.0 / CHERRIES.length);
+      const cp = E.outBack(seg(t, ct0, ct0 + .3), 2.6);
+      c.g.setAttribute('transform', `translate(${c.x},${c.y}) scale(${Math.max(cp, .001).toFixed(3)})`);
+    });
+    set(s3Branch, { y: 14 * Math.sin(t * .9), op: 1 });
+  }
+
+  // ================= CENA 4 =================
+  if (t >= T.s4 - .4 && t < T.s5 + .6) {
+    const t0 = VO[3][0];
+    drawIn(s4House, E.inOutCubic(seg(t, T.s4, T.s4 + 1.0)));
+    set(s4House, { op: E.outCubic(seg(t, T.s4, T.s4 + .3)) });
+    s4Txt1.ws.forEach((w, i) => set(w, wordIn(t, t0 + .1 + i * .22)));
+    const rp = E.inOutSine(seg(t, t0 + .5, t0 + 2.2));
+    route.style.strokeDashoffset = '0';
+    route.setAttribute('stroke-dasharray', `2 22`);
+    route.style.clipPath = 'none';
+    // mostra a rota até o ponto atual (máscara pelo comprimento)
+    route.setAttribute('stroke-dasharray', Array.from({ length: Math.ceil(ROUTE_LEN / 24) }, (_, k) => (k * 24 < rp * ROUTE_LEN ? '2 22' : '0 24')).join(' '));
+    pathBeans.forEach((g, i) => {
+      const u = clamp(rp * 1.05 - i * .07);
+      const pt = route.getPointAtLength(u * ROUTE_LEN);
+      g.setAttribute('transform', `translate(${pt.x},${pt.y}) rotate(${(u * 720 + i * 40).toFixed(1)})`);
+      g.style.opacity = rp > i * .07 && u < .98 ? 1 : 0;
+    });
+    const cp = E.outBack(seg(t, t0 + 1.4, t0 + 2.0), 1.4);
+    set(s4Cup, { op: E.outCubic(seg(t, t0 + 1.4, t0 + 1.6)), s: lerp(.7, 1, cp), y: 40 * (1 - E.outCubic(seg(t, t0 + 1.4, t0 + 2.0))) });
+    s4Cup.style.transformOrigin = '50% 70%';
+    // café "enche" a xícara
+    const fill = E.outCubic(seg(t, t0 + 2.0, t0 + 2.9));
+    $('coffee').setAttribute('ry', (8 + 16 * fill).toFixed(1));
+    $('coffee').setAttribute('rx', (90 + 56 * fill).toFixed(1));
+    $('crema').setAttribute('opacity', (.7 * fill).toFixed(2));
+    steam.forEach((s, i) => {
+      const k = seg(t, t0 + 2.4 + i * .2, t0 + 3.2 + i * .2);
+      let d = 'M0 0';
+      for (let y = 0; y >= -380; y -= 20) {
+        const x = Math.sin(y / 60 + t * 2.2 + i * 2) * (14 + -y * .08) + (i - 1) * 40;
+        d += `L${x.toFixed(1)} ${y}`;
+      }
+      s.querySelector('path').setAttribute('d', d);
+      set(s, { x: CUP.x - 100 + (i - 1) * 20, y: CUP.y - 300 - 100, op: .8 * k, blur: 6 });
+    });
+    s4Txt2.ws.forEach((w, i) => set(w, wordIn(t, t0 + 1.7 + i * .16, { dy: 18 })));
+  }
+
+  // ================= CENA 5 =================
+  if (t >= T.s5 - .4 && t < T.s6 + .6) {
+    const t0 = VO[4][0];
+    const dp = seg(t, T.s5 - .1, T.s5 + .75);
+    set(s5Pack, { y: lerp(-1100, 0, E.outBounce(dp)), op: dp > 0 ? 1 : 0, s: 1 + .015 * Math.sin(t * 1.4) * seg(t, T.s5 + .8, T.s5 + 1.6) });
+    s5Pack.style.transformOrigin = '50% 100%';
+    $('shine').setAttribute('x', lerp(-300, 700, E.inOutCubic(seg(t, T.s5 + 1.3, T.s5 + 2.3))).toFixed(1));
+    s5Beans.forEach((b, i) => {
+      const bt = T.s5 + .55 + i * .03;
+      const p = seg(t, bt, bt + .45);
+      const tx = 140 + (i / 15) * 800 + (rand(i) - .5) * 40, ty = 1420 + (rand(i * 3) - .5) * 40 - (Math.abs(i - 7.5) < 3 ? 0 : 20);
+      set(b, { x: tx - 30, y: ty - 30 - 120 * Math.sin(Math.PI * p) * (1 - p), r: rand(i * 5) * 360 + p * 200, op: p > 0 ? 1 : 0 });
+    });
+    s5Sprigs.forEach((d, i) => set(d, { x: (i ? 1 : -1) * 120 * (1 - E.outCubic(seg(t, T.s5, T.s5 + 1))), op: .8, blur: 7 }));
+    s5Title.ws.forEach((w, i) => set(w, wordIn(t, t0 + i * .22, { dy: 30, s0: 1.12 })));
+    const rb = E.outCubic(seg(t, t0 + 1.4, t0 + 2.0));
+    set(s5Rib, { op: E.outCubic(seg(t, t0 + 1.4, t0 + 1.6)), sx: lerp(.1, 1, rb), blur: 6 * (1 - rb) });
+  }
+
+  // ================= CENA 6 =================
+  if (t >= T.s6 - .4) {
+    const lt = t - T.s6;
+    drawIn(s6Corners, E.inOutCubic(seg(t, T.s6 + .1, T.s6 + 1.4)));
+    const lp = seg(t, T.s6 - .2, T.s6 + .9);
+    set(s6Logo, { op: E.outCubic(lp), s: lerp(1.08, 1, E.outCubic(lp)) * (1 + .012 * lt), blur: 10 * (1 - E.outCubic(lp)) });
+    set(s6Div, { op: E.outCubic(seg(t, VO[5][0] - .2, VO[5][0] + .3)), sx: E.outCubic(seg(t, VO[5][0] - .2, VO[5][0] + .5)) });
+    set(s6Cta, wordIn(t, VO[5][0], { dy: 24 }));
+    set(s6Handle, wordIn(t, VO[5][0] + .7, { dy: 20 }));
+    set(s6Foot, wordIn(t, VO[5][0] + 1.2, { dy: 16 }));
+  }
+
+  // ================= película =================
+  $('turb').setAttribute('seed', String(fr % 61));
+  const fl = .03 + .025 * rand(fr * 1.7) + .04 * Math.max(0, Math.sin(fr * .9)) * (rand(fr) > .9 ? 1 : 0);
+  $('flick').style.opacity = fl.toFixed(3);
+  // vazamento de luz quente (mais forte nas transições)
+  const near = Math.min(...[T.s2, T.s3, T.s4, T.s5, T.s6].map(c => Math.abs(t - c)));
+  const leakA = .1 + .35 * Math.exp(-near * near / .15);
+  $('leak').style.background = `radial-gradient(ellipse 60% 45% at ${50 + 30 * Math.sin(t * .37)}% ${30 + 20 * Math.cos(t * .23)}%, rgba(255,150,60,${leakA.toFixed(3)}), rgba(255,120,40,0) 70%)`;
+  // poeira e riscos
+  dust.clearRect(0, 0, W, H);
+  for (let i = 0; i < 9; i++) {
+    const r = rand(fr * 13 + i);
+    if (r < .45) continue;
+    const x = rand(fr * 7 + i * 3) * W, y = rand(fr * 11 + i * 5) * H, s = 1 + rand(fr + i * 9) * 3.5;
+    dust.fillStyle = rand(fr * 3 + i) > .5 ? 'rgba(20,12,6,.55)' : 'rgba(255,240,210,.35)';
+    dust.beginPath(); dust.ellipse(x, y, s, s * (.5 + rand(i + fr) * .8), rand(fr + i) * 3, 0, Math.PI * 2); dust.fill();
+  }
+  if (rand(fr * .37) > .82) {
+    const x = rand(Math.floor(fr / 4) * 5.3) * W;
+    dust.strokeStyle = 'rgba(255,235,200,.12)'; dust.lineWidth = 1.2;
+    dust.beginPath(); dust.moveTo(x, 0); dust.lineTo(x + 6, H); dust.stroke();
+  }
+}
+
+/* =====================================================================
+   EFEITOS SONOROS (mesmo cronograma)
+   ===================================================================== */
+const SFX = [];
+const sfx = (t, type, o = {}) => SFX.push({ t: +t.toFixed(4), type, ...o });
+sfx(0.0, 'ambience', { dur: T.s2 + 1.0, gain: .8 });            // vento + passarinhos ao amanhecer
+sfx(0.0, 'crickets', { dur: 2.6, gain: .35 });
+sfx(1.6, 'rooster', { gain: .55 });                                // galo ao longe
+sfx(VO[0][0] - .25, 'shimmer', { gain: .45 });                     // "Mococa · SP" aparece
+sfx(T.s2 - .35, 'paper', { gain: .8 });                            // tinta/papel: transição
+sfx(T.s2 - .3, 'swish', { gain: .5, dur: .8 });
+sfx(T.s2 + .6, 'tok', { gain: .55, note: 76 });                    // ornamento
+sfx(T.s3 - .35, 'paper', { gain: .7, seed: 3 });
+sfx(VO[2][0], 'stamp', { gain: 1 });                               // "100%" carimbado
+sfx(VO[2][0] + .65, 'stamp', { gain: .55, light: true });          // "ARÁBICA"
+CHERRIES.forEach((c, i) => { if (i % 2 === 0) sfx(T.s3 + .9 + i * (2.0 / CHERRIES.length) + .05, 'tok', { gain: .5, note: [64, 68, 71, 73, 76, 80, 83][(i / 2) % 7 | 0] }); });
+sfx(VO[2][0] + 1.9, 'unfurl', { gain: .7 });                       // fita "Variedade Arara"
+sfx(T.s4 - .35, 'paper', { gain: .7, seed: 5 });
+sfx(VO[3][0] + .5, 'beans', { dur: 1.6, gain: .7 });              // grãos correndo pelo caminho
+sfx(VO[3][0] + 1.4, 'clink', { gain: .6 });                        // xícara pousa
+sfx(VO[3][0] + 1.95, 'pour', { dur: 1.1, gain: .8 });              // café caindo na xícara
+sfx(VO[3][0] + 3.0, 'clink', { gain: .45, spoon: true });
+sfx(T.s5 - .35, 'paper', { gain: .6, seed: 7 });
+sfx(T.s5 + .62, 'thud', { gain: 1 });                              // pacote pousa
+sfx(T.s5 + .62, 'beans', { dur: .7, gain: .6, scatter: true });
+sfx(T.s5 + 1.3, 'shimmer', { gain: .55 });                          // brilho no pacote
+sfx(VO[4][0] + 1.4, 'unfurl', { gain: .5 });
+sfx(T.s6 - .35, 'swish', { gain: .5, dur: .9 });
+sfx(T.s6 + .05, 'stamp', { gain: .7, light: true });               // logo
+sfx(VO[5][0], 'tok', { gain: .5, note: 71 });
+sfx(T.s6 + 2.4, 'ambience', { dur: DUR - T.s6 - 2.4, gain: .45, birdsOnly: true });
+
+// marcas para a trilha (seções)
+const MUSIC = { bpm: BPM, cuts: [T.s2, T.s3, T.s4, T.s5, T.s6], dur: DUR };
+
+window.T = T; window.VO = VO; window.SFX = SFX; window.MUSIC = MUSIC; window.DUR = DUR;
+window.render = render;
+render(+(new URLSearchParams(location.search).get('t') || 0));
+</script>
+</body>
+</html>
